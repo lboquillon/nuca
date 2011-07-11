@@ -85,7 +85,7 @@ public:
 
     void load(size_t& number)
     {
-        char* number_chr = reinterpret_cast<char*>(&number);
+        char* const number_chr = reinterpret_cast<char*>(&number);
         for (size_t byte = 0; byte < sizeof(number); ++byte)
             load(number_chr[byte]);
     }
