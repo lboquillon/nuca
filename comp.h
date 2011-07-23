@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <biopp/bio_molecular/bio_molecular.h>
 
 using namespace std;
 
@@ -177,8 +178,6 @@ public:
 //static void loadSeq(const char* fname, Sequence& seq);
 template <class User>
 static void storeSeq(Storer<User>& st, const Sequence& seq);
-
-enum Nuc { A, T, C, G };
 
 inline BufferType nuc2data(char nuc)
 {
