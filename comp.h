@@ -193,11 +193,11 @@ inline char data2nuc(BufferType b)
 template <class User>
 inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 {
-	const std::string sequ = seq.getString();
+    const std::string sequ = seq.getString();
 
     for (std::string::const_iterator it = sequ.begin(); it != sequ.end(); ++it)
     {
-    	st.add(static_cast<BufferType>(to_nuc(*it)));
+        st.add(static_cast<BufferType>(to_nuc(*it)));
     }
 
     st.close();
@@ -206,12 +206,12 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 template <class User>
 inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 {
-	string NucSequence = "";
+    string sequence = "";
 
     typename Retriever<User>::Data data;
     while (rt.get(data))
-    	NucSequence += data2nuc(data);
+        sequence += data2nuc(data);
 
-    seq = NucSequence;
+    seq = sequence;
 }
 
