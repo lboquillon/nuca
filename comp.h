@@ -178,16 +178,6 @@ public:
 template <class User>
 static void storeSeq(Storer<User>& st, const NucSequence& seq);
 
-inline char data2nuc(BufferType b)
-{
-    static const char nucs[] = "ATCG";
-    if (b <= G)
-        return nucs[unsigned(b)];
-    else
-        throw string("Invalid byte");
-}
-
-
 // Utility ------------------------------
 
 template <class User>
@@ -210,7 +200,7 @@ inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 
     typename Retriever<User>::Data data;
     while (rt.get(data))
-        sequence += data2nuc(data);
+        sequence += to_str(static_cast<Nucleotide>(data));
 
     seq = sequence;
 }
