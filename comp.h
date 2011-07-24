@@ -179,29 +179,6 @@ public:
 template <class User>
 static void storeSeq(Storer<User>& st, const Sequence& seq);
 
-inline BufferType nuc2data(char nuc)
-{
-    switch (nuc)
-    {
-        case 'A':
-        case 'a':
-            return A;
-        case 'T':
-        case 't':
-        case 'U':
-        case 'u':
-            return T;
-        case 'C':
-        case 'c':
-            return C;
-        case 'G':
-        case 'g':
-            return G;
-        default:
-            throw string("Invalid nucleotide ") + nuc;
-    }
-}
-
 inline char data2nuc(BufferType b)
 {
     static const char nucs[] = "ATCG";
@@ -219,9 +196,7 @@ inline void storeSeq(Storer<User>& st, const Sequence& seq)
 {
     for (Sequence::const_iterator it = seq.begin(); it != seq.end(); ++it)
     {
-    	cout << "Fuck yea" << endl;
     	st.add(static_cast<BufferType>(to_nuc(*it)));
-        //st.add(nuc2data(*it));
     }
 
     st.close();
