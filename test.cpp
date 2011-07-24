@@ -29,7 +29,7 @@ int main()
 {
     try
     {
-    	const std::string str = "ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC";
+        const std::string str = "ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC";
         NucSequence seq = str;
         testSave(seq);
         cerr << "----------" << endl;
