@@ -219,7 +219,9 @@ inline void storeSeq(Storer<User>& st, const Sequence& seq)
 {
     for (Sequence::const_iterator it = seq.begin(); it != seq.end(); ++it)
     {
-        st.add(nuc2data(*it));
+    	cout << "Fuck yea" << endl;
+    	st.add(static_cast<BufferType>(to_nuc(*it)));
+        //st.add(nuc2data(*it));
     }
 
     st.close();
