@@ -2,34 +2,35 @@
 
 #include "comp.h"
 
-static void showSeq(const Sequence& seq)
+static void showSeq(const NucSequence& seq)
 {
-    cout << seq << " " << "(" << seq.size() << ")" << endl;
+    cout << seq.getString() << " " << "(" << seq.length() << ")" << endl;
 }
 
-static void testSave(const Sequence& seq)
+static void testSave(const NucSequence& seq)
 {
     showSeq(seq);
     Saver saver("archivo.out");
-    Storer<Saver> storer(saver, seq.size());
+    Storer<Saver> storer(saver, seq.length());
     storeSeq(storer, seq);
 }
 
-static void testLoad(const Sequence& orig)
+static void testLoad(const NucSequence& orig)
 {
-    Sequence seq;
+    NucSequence seq;
     Loader loader("archivo.out");
     Retriever<Loader> retriever(loader);
     loadSeq(retriever, seq);
     showSeq(seq);
-    cout << boolalpha << (orig == seq) << endl;
+    cout << boolalpha << (orig.getString() == seq.getString()) << endl;
 }
 
 int main()
 {
     try
     {
-        const Sequence seq = "ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC";
+    	const std::string str = "ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC";
+        NucSequence seq = str;
         testSave(seq);
         cerr << "----------" << endl;
         testLoad(seq);

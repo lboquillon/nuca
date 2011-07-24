@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "comp.h"
 
-static void loadUncompressed(const char* fname, Sequence& seq);
+static void loadUncompressed(const char* fname, NucSequence& seq);
 
 int main(int argc, char* argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     {
         try
         {
-            Sequence seq;
+            NucSequence seq;
             loadUncompressed(argv[1], seq);
             Saver saver(argv[2]);
             Storer<Saver> storer(saver, seq.size());
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     return ret;
 }
 
-void loadUncompressed(const char* fname, Sequence& seq)
+void loadUncompressed(const char* fname, NucSequence& seq)
 {
     ifstream input(fname);
     if (!input)
