@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     {
         try
         {
-            Sequence seq;
+            NucSequence seq;
             Loader loader(argv[1]);
             Retriever<Loader> retriever(loader);
             loadSeq(retriever, seq);

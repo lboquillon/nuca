@@ -7,7 +7,6 @@
 
 using namespace std;
 
-typedef string Sequence;
 typedef unsigned char BufferType;
 
 // Loader part: =======================
@@ -175,9 +174,9 @@ public:
 };
 
 
-//static void loadSeq(const char* fname, Sequence& seq);
+//static void loadSeq(const char* fname, NucSequence& seq);
 template <class User>
-static void storeSeq(Storer<User>& st, const Sequence& seq);
+static void storeSeq(Storer<User>& st, const NucSequence& seq);
 
 inline char data2nuc(BufferType b)
 {
@@ -192,9 +191,11 @@ inline char data2nuc(BufferType b)
 // Utility ------------------------------
 
 template <class User>
-inline void storeSeq(Storer<User>& st, const Sequence& seq)
+inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 {
-    for (Sequence::const_iterator it = seq.begin(); it != seq.end(); ++it)
+	const std::string sequ = seq.getString();
+
+    for (std::string::const_iterator it = sequ.begin(); it != sequ.end(); ++it)
     {
     	st.add(static_cast<BufferType>(to_nuc(*it)));
     }
@@ -203,10 +204,14 @@ inline void storeSeq(Storer<User>& st, const Sequence& seq)
 }
 
 template <class User>
-inline void loadSeq(Retriever<User>& rt, Sequence& seq)
+inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 {
+	string NucSequence = "";
+
     typename Retriever<User>::Data data;
     while (rt.get(data))
-        seq += data2nuc(data);
+    	NucSequence += data2nuc(data);
+
+    seq = NucSequence;
 }
 
