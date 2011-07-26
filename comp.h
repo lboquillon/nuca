@@ -187,7 +187,7 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 
     for (std::string::const_iterator it = sequ.begin(); it != sequ.end(); ++it)
     {
-        st.add(static_cast<BufferType>(to_nuc(*it)));
+        st.add(BufferType(to_nuc(*it)));
     }
 
     st.close();
@@ -200,7 +200,7 @@ inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 
     typename Retriever<User>::Data data;
     while (rt.get(data))
-        sequence += to_str(static_cast<Nucleotide>(data));
+        sequence += to_str(Nucleotide(data));
 
     seq = sequence;
 }
