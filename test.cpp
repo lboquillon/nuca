@@ -49,7 +49,7 @@ int main()
 {
     try
     {
-        NucSequence seq("ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC");
+        const NucSequence seq("ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC");
         testSave(seq);
         cerr << "----------" << endl;
         testLoad(seq);
