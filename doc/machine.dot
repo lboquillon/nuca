@@ -1,0 +1,15 @@
+digraph escape_sequence_fsm {
+	rankdir = LR;
+	size="10"
+	node [shape = doublecircle]; start exit;
+	node [shape = circle];
+	start -> not_n [ label = "!N / addNuc" ];
+	start -> n [label = "N / Ns = 1" ];
+	start -> exit [label = "seqEnd"];
+	not_n -> n [label = "N / Ns = 1"];
+	not_n -> exit [label = "seqEnd"];
+	n -> not_n [label = "!N / { EscSeq; addNuc; Ns = 0}"];
+	n -> n [label= "N / Ns++"];
+	n -> n [label= "N > 255 / {EscSeq; Ns = 1}"];
+	n -> exit [label = "seqEnd / EscSeq"];	
+}
