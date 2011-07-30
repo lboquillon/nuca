@@ -216,12 +216,8 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 template <class User>
 inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 {
-    string sequence = "";
-
     typename Retriever<User>::Data data;
     while (rt.get(data))
-        sequence += to_str(Nucleotide(data));
-
-    seq = sequence;
+        seq += Nucleotide(data);
 }
 
