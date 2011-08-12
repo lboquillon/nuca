@@ -164,6 +164,7 @@ public:
     void close()
     {
         flush();
+        u.close();
     }
 };
 
@@ -191,6 +192,11 @@ public:
         for (size_t byte = 0; byte < sizeof(number); ++byte)
             save(number_chr[byte]);
     }
+
+    void close()
+    {
+        of.close();
+    }
 };
 
 
@@ -216,12 +222,8 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
 template <class User>
 inline void loadSeq(Retriever<User>& rt, NucSequence& seq)
 {
-    string sequence = "";
-
     typename Retriever<User>::Data data;
     while (rt.get(data))
-        sequence += to_str(Nucleotide(data));
-
-    seq = sequence;
+        seq += Nucleotide(data);
 }
 
