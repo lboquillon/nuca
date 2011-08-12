@@ -164,6 +164,7 @@ public:
     void close()
     {
         flush();
+        u.close();
     }
 };
 
@@ -190,6 +191,11 @@ public:
         const char* number_chr = reinterpret_cast<const char*>(&number);
         for (size_t byte = 0; byte < sizeof(number); ++byte)
             save(number_chr[byte]);
+    }
+
+    void close()
+    {
+        of.close();
     }
 };
 
