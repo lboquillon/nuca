@@ -24,7 +24,7 @@ test.cpp: Nucleotides Compression Algorithms
 
 static void showSeq(const NucSequence& seq)
 {
-    cout << seq.getString() << " " << "(" << seq.length() << ")" << endl;
+    cout << seq << " " << "(" << seq.length() << ")" << endl;
 }
 
 static void testSave(const NucSequence& seq)
@@ -42,7 +42,7 @@ static void testLoad(const NucSequence& orig)
     Retriever<Loader> retriever(loader);
     loadSeq(retriever, seq);
     showSeq(seq);
-    cout << boolalpha << (orig.getString() == seq.getString()) << endl;
+    cout << boolalpha << (orig == seq) << endl;
 }
 
 int main()
