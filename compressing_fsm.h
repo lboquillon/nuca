@@ -20,6 +20,9 @@ compressing_fsm.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
+#ifndef _COMPRESSING_FSM_INCLUDE_
+#define _COMPRESSING_FSM_INCLUDE_
+
 #include <string>
 
 class CompressingFSM
@@ -297,3 +300,5 @@ CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulaRareSeqChar
 
     return state;
 }
+
+#endif
