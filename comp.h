@@ -4,7 +4,7 @@ comp.h: Nucleotides Compression Algorithms
 
     This file is part of Nuca.
 
-    Aso is free software: you can redistribute it and/or modify
+    Nuca is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -157,7 +157,7 @@ public:
         if (free_bits < DataSize)
             flush();
 
-        buffer |= (data << (TotalFreeBits - free_bits));  // optimize out!
+        buffer |= (data << (TotalFreeBits - free_bits));     // optimize out!
         free_bits -= DataSize;
     }
 
