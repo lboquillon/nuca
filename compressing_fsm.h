@@ -1,6 +1,6 @@
 /*
 compressing_fsm.h: Nucleotides Compression Algorithms
-    Copyright (C) 2011 Daniel Gutson and Leonardo Boquillon, FuDePAN
+    Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
 
@@ -20,8 +20,8 @@ compressing_fsm.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef _COMPRESSING_FSM_INCLUDE_
-#define _COMPRESSING_FSM_INCLUDE_
+#ifndef COMPRESSING_FSM
+#define COMPRESSING_FSM
 
 #include <string>
 
@@ -52,7 +52,6 @@ private:
     public:
         StateInitial(CompressingFSM* m) : State(m)
         { }
-        ~StateInitial() { }
     };
 
     class StateNotN : public State
@@ -65,7 +64,6 @@ private:
     public:
         StateNotN(CompressingFSM* m) : State(m)
         { }
-        ~StateNotN() { }
     };
 
     class StateN : public State
@@ -78,7 +76,6 @@ private:
     public:
         StateN(CompressingFSM* m) : State(m)
         { }
-        ~StateN() { }
     };
 
     class StateRareSequenceChar : public State
@@ -91,7 +88,6 @@ private:
     public:
         StateRareSequenceChar(CompressingFSM* m) : State(m)
         { }
-        ~StateRareSequenceChar() { }
     };
 
 
@@ -149,6 +145,9 @@ public:
 
     void stimulate(char sti)
     {
+        if (current == NULL)
+            throw "Invalid State";
+
         if (sti == rareSeq[stimuliOrder])
             current = current->stimulaRareSeqChar();
         else
