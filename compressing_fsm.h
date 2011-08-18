@@ -103,7 +103,7 @@ private:
 
     void addMissingNuc()
     {
-        outSeq += std::string(rareSeq.begin(), rareSeq.begin() + stimuliOrder);
+        outSeq += rareSeq.substr (0, stimuliOrder);
         stimuliOrder = 0;
     }
 
