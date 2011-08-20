@@ -91,10 +91,10 @@ private:
     };
 
 
-    const State* stateInitial;
-    const State* stateNotN;
-    const State* stateN;
-    const State* stateRareSequenceChar;
+    const State* const stateInitial;
+    const State* const stateNotN;
+    const State* const stateN;
+    const State* const stateRareSequenceChar;
     const State* current;
     std::string& outSeq;
     std::string rareSeq;
@@ -103,7 +103,7 @@ private:
 
     void addMissingNuc()
     {
-        outSeq += rareSeq.substr (0, stimuliOrder);
+        outSeq += rareSeq.substr(0, stimuliOrder);
         stimuliOrder = 0;
     }
 
@@ -234,8 +234,9 @@ const CompressingFSM::State* CompressingFSM::StateN::stimulusNotN(char c) const
 const CompressingFSM::State* CompressingFSM::StateN::stimulusN() const
 {
     if (fsm->ns < 255)
+    {
         fsm->ns++;
-
+    }
     else
     {
         fsm->makeEscapeSequence();

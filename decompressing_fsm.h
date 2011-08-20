@@ -81,10 +81,10 @@ private:
         StateReadingNCount(DecompressingFSM* dcfsm) : State(dcfsm) { }
     };
 
-    const State* stateInitial;
-    const State* stateNuc;
-    const State* stateEscapeSequenceChar;
-    const State* stateReadBit;
+    const State* const stateInitial;
+    const State* const stateNuc;
+    const State* const stateEscapeSequenceChar;
+    const State* const stateReadBit;
     const State* current;
     std::string& outSeq;
     std::string rareSeq;
