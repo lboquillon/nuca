@@ -34,7 +34,9 @@ private:
     protected:
         CompressingFSM* const fsm;
     public:
-        State(CompressingFSM* m) : fsm(m) {}
+        State(CompressingFSM* m) : fsm(m)
+        {
+        }
         virtual const State* stimulusNotN(char) const = 0;
         virtual const State* stimulusN() const = 0;
         virtual const State* stimulusEndSeq() const = 0;
@@ -123,7 +125,6 @@ public:
         , current(stateInitial)
         , stimuliOrder(0)
     {
-        outSeq = "";
     }
 
     ~CompressingFSM()
