@@ -32,7 +32,9 @@ private:
     protected:
         DecompressingFSM* const fsm;
     public:
-        State(DecompressingFSM* dcfsm) : fsm(dcfsm) { }
+        State(DecompressingFSM* dcfsm) : fsm(dcfsm)
+        {
+        }
         virtual ~State() { }
 
         virtual const State* stimulusNuc(char) const = 0;
@@ -109,7 +111,8 @@ public:
         , nc(0)
         , nCounter(0)
         , bc(0)
-    { }
+    {
+    }
 
     ~DecompressingFSM()
     {
