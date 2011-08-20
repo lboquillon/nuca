@@ -19,8 +19,8 @@ decompressing_fsm.h: Nucleotides Compression Algorithms
 
     NOTE: This file is in prototype stage, and is under active development.
 */
-#ifndef DECOMPRESSING_FSM
-#define DECOMPRESSING_FSM
+#ifndef DECOMPRESSING_FSM_H
+#define DECOMPRESSING_FSM_H
 
 #include "fsm.h"
 
@@ -134,7 +134,7 @@ public:
         if (current == NULL)
             throw "Invalid State";
 
-        if (sti == rareSeq[nc])
+        if (sti == rareSeq[nc] && bc == 0)
         {
             current = current->stimulusEscSeqChar();
         }
@@ -209,7 +209,6 @@ inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar:
     }
 
     return state;
-
 }
 
 inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEndSeq() const
@@ -244,6 +243,7 @@ inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stim
         default:
             val = 0;
     }
+
 
     fsm->nCounter = (fsm->nCounter << 2) | val;
 
