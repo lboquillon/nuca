@@ -65,7 +65,8 @@ private:
         const State* stimulusRareSeqChar() const;
     public:
         StateNotN(CompressingFSM* m) : State(m)
-        { }
+        {
+        }
     };
 
     class StateN : public State
@@ -77,7 +78,8 @@ private:
         const State* stimulusRareSeqChar() const;
     public:
         StateN(CompressingFSM* m) : State(m)
-        { }
+        {
+        }
     };
 
     class StateRareSequenceChar : public State
@@ -89,7 +91,8 @@ private:
         const State* stimulusRareSeqChar() const;
     public:
         StateRareSequenceChar(CompressingFSM* m) : State(m)
-        { }
+        {
+        }
     };
 
 
@@ -117,13 +120,13 @@ private:
 
 public:
     CompressingFSM(std::string& out)
-        : Fsm(out)
-        , stateInitial(new StateInitial(this))
-        , stateNotN(new StateNotN(this))
-        , stateN(new StateN(this))
-        , stateRareSequenceChar(new StateRareSequenceChar(this))
-        , current(stateInitial)
-        , stimuliOrder(0)
+        : Fsm(out),
+          stateInitial(new StateInitial(this)),
+          stateNotN(new StateNotN(this)),
+          stateN(new StateN(this)),
+          stateRareSequenceChar(new StateRareSequenceChar(this)),
+          current(stateInitial),
+          stimuliOrder(0)
     {
     }
 
@@ -284,7 +287,6 @@ const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusRare
         fsm->stimuliOrder++;
         state = this;
     }
-
     else
     {
         fsm->stimuliOrder = 0;
