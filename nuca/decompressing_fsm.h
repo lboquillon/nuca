@@ -151,41 +151,41 @@ public:
     }
 };
 
-const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
+inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
 {
     fsm->outSeq += n;
     return fsm->stateNuc;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEscSeqChar() const
+inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEscSeqChar() const
 {
     fsm->nc = 1;
     return fsm->stateEscapeSequenceChar;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEndSeq() const
+inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEndSeq() const
 {
     return NULL;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusNuc(char n) const
+inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusNuc(char n) const
 {
     fsm->outSeq += n;
     return this;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEscSeqChar() const
+inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEscSeqChar() const
 {
     fsm->nc = 1;
     return fsm->stateEscapeSequenceChar;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEndSeq() const
+inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEndSeq() const
 {
     return NULL;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusNuc(char n) const
+inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusNuc(char n) const
 {
     fsm->addMissingNuc(fsm->nc);
     fsm->outSeq += n;
@@ -193,7 +193,7 @@ const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimul
     return fsm->stateNuc;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEscSeqChar() const
+inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEscSeqChar() const
 {
     const State* state;
 
@@ -212,13 +212,13 @@ const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimul
 
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEndSeq() const
+inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEndSeq() const
 {
     fsm->addMissingNuc(fsm->nc);
     return NULL;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusNuc(char n) const
+inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusNuc(char n) const
 {
     const State* state;
     char val;
@@ -263,12 +263,12 @@ const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusNuc
     return state;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEscSeqChar() const
+inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEscSeqChar() const
 {
     return NULL;
 }
 
-const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEndSeq() const
+inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEndSeq() const
 {
     return NULL;
 }
