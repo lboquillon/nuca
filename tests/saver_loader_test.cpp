@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <biopp/bio_molecular/bio_molecular.h>
-#include "../comp.h"
+#include "comp.h"
 
 TEST(saver_loader, equalStr1)
 {

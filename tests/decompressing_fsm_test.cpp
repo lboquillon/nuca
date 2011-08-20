@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../decompressing_fsm.h"
+#include "decompressing_fsm.h"
 
 TEST(Decompressing, equalStr)
 {
