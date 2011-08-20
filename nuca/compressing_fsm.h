@@ -20,8 +20,8 @@ compressing_fsm.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef COMPRESSING_FSM
-#define COMPRESSING_FSM
+#ifndef COMPRESSING_FSM_H
+#define COMPRESSING_FSM_H
 
 #include "fsm.h"
 
