@@ -49,7 +49,9 @@ private:
         const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateInitial(DecompressingFSM* dcfsm) : State(dcfsm) { }
+        StateInitial(DecompressingFSM* dcfsm) : State(dcfsm)
+        {
+        }
     };
 
     class StateNuc : public State
@@ -59,7 +61,9 @@ private:
         const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateNuc(DecompressingFSM* dcfsm): State(dcfsm) { }
+        StateNuc(DecompressingFSM* dcfsm): State(dcfsm)
+        {
+        }
     };
 
     class StateEscapeSequenceChar : public State
@@ -69,7 +73,9 @@ private:
         const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateEscapeSequenceChar(DecompressingFSM* dcfsm) : State(dcfsm) { }
+        StateEscapeSequenceChar(DecompressingFSM* dcfsm) : State(dcfsm)
+        {
+        }
     };
 
     class StateReadingNCount : public State
@@ -79,7 +85,9 @@ private:
         const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateReadingNCount(DecompressingFSM* dcfsm) : State(dcfsm) { }
+        StateReadingNCount(DecompressingFSM* dcfsm) : State(dcfsm)
+        {
+        }
     };
 
     const State* const stateInitial;
@@ -95,22 +103,21 @@ private:
     {
         if (0 == nCounter)
             outSeq += rareSeq;
-
         else
             outSeq += std::string(nCounter, 'N');
     }
 
 public:
     DecompressingFSM(std::string& out)
-        : Fsm(out)
-        , stateInitial(new StateInitial(this))
-        , stateNuc(new StateNuc(this))
-        , stateEscapeSequenceChar(new StateEscapeSequenceChar(this))
-        , stateReadBit(new StateReadingNCount(this))
-        , current(stateInitial)
-        , nc(0)
-        , nCounter(0)
-        , bc(0)
+        : Fsm(out),
+          stateInitial(new StateInitial(this)),
+          stateNuc(new StateNuc(this)),
+          stateEscapeSequenceChar(new StateEscapeSequenceChar(this)),
+          stateReadBit(new StateReadingNCount(this)),
+          current(stateInitial),
+          nc(0),
+          nCounter(0),
+          bc(0)
     {
     }
 
@@ -128,7 +135,9 @@ public:
             throw "Invalid State";
 
         if (sti == rareSeq[nc])
+        {
             current = current->stimulusEscSeqChar();
+        }
         else
         {
             current = current->stimulusNuc(sti);
@@ -193,7 +202,6 @@ const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimul
         fsm->nc++;
         state = this;
     }
-
     else
     {
         fsm->bc = 1;
@@ -244,7 +252,6 @@ const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusNuc
         ++fsm->bc;
         state = this;
     }
-
     else
     {
         fsm->addNs();

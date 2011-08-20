@@ -43,8 +43,8 @@ protected:
 
 public:
     Fsm(std::string& out)
-        : rareSeq("TTT")
-        , outSeq(out)
+        : rareSeq("TTT"),
+          outSeq(out)
     {
         outSeq = "";
     }
