@@ -24,6 +24,7 @@ compressing_fsm.h: Nucleotides Compression Algorithms
 #define COMPRESSING_FSM
 
 #include <string>
+#include "fsm.h"
 
 class CompressingFSM
 {
@@ -157,14 +158,17 @@ public:
                 case 'N':
                     current = current->stimulusN();
                     break;
-                case 0:
-                    current = current->stimulusEndSeq();
-                    break;
                 default:
                     current = current->stimulusNotN(sti);
             }
         }
     }
+
+	void stimulate(EndSeqStimulus sti)
+	{
+		if (sti == EndSeq)
+			current->stimulusEndSeq();
+	}
 
     std::string getEscapeSequence() const
     {

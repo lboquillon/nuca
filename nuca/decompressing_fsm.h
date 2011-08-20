@@ -19,11 +19,11 @@ decompressing_fsm.h: Nucleotides Compression Algorithms
 
     NOTE: This file is in prototype stage, and is under active development.
 */
-
-#include <string>
-
 #ifndef DECOMPRESSING_FSM
 #define DECOMPRESSING_FSM
+
+#include <string>
+#include "fsm.h"
 
 class DecompressingFSM
 {
@@ -137,17 +137,15 @@ public:
             current = current->stimulusEscSeqChar();
         else
         {
-            switch (sti)
-            {
-                case 0:
-                    current = current->stimulusEndSeq();
-                    break;
-
-                default:
-                    current = current->stimulusNuc(sti);
-            }
+        	current = current->stimulusNuc(sti);   
         }
     }
+
+	void stimulate (EndSeqStimulus sti)
+	{
+		if (sti == EndSeq)
+			current->stimulusEndSeq();
+	}
 };
 
 const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
