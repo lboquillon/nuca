@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "compressing_fsm.h"
+#include "nuca.h"
 
 TEST(Compressing, compressingNs1)
 {
