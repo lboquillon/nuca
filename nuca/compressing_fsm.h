@@ -23,10 +23,9 @@ compressing_fsm.h: Nucleotides Compression Algorithms
 #ifndef COMPRESSING_FSM
 #define COMPRESSING_FSM
 
-#include <string>
 #include "fsm.h"
 
-class CompressingFSM
+class CompressingFSM : private Fsm
 {
 private:
 
@@ -97,16 +96,8 @@ private:
     const State* const stateN;
     const State* const stateRareSequenceChar;
     const State* current;
-    std::string& outSeq;
-    std::string rareSeq;
     size_t ns;
     size_t stimuliOrder;
-
-    void addMissingNuc()
-    {
-        outSeq += rareSeq.substr(0, stimuliOrder);
-        stimuliOrder = 0;
-    }
 
     void makeEscapeSequence()
     {
@@ -124,13 +115,12 @@ private:
 
 public:
     CompressingFSM(std::string& out)
-        : stateInitial(new StateInitial(this))
+        : Fsm(out)
+        , stateInitial(new StateInitial(this))
         , stateNotN(new StateNotN(this))
         , stateN(new StateN(this))
         , stateRareSequenceChar(new StateRareSequenceChar(this))
         , current(stateInitial)
-        , outSeq(out)
-        , rareSeq("TTT")
         , stimuliOrder(0)
     {
         outSeq = "";
@@ -164,16 +154,12 @@ public:
         }
     }
 
-	void stimulate(EndSeqStimulus sti)
-	{
-		if (sti == EndSeq)
-			current->stimulusEndSeq();
-	}
-
-    std::string getEscapeSequence() const
+    void stimulate(EndSeqStimulus sti)
     {
-        return outSeq;
+        if (sti == EndSeq)
+            current->stimulusEndSeq();
     }
+
 };
 
 const CompressingFSM::State* CompressingFSM::StateInitial::stimulusNotN(char c) const
@@ -266,14 +252,16 @@ const CompressingFSM::State* CompressingFSM::StateN::stimulusRareSeqChar() const
 
 const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusNotN(char c) const
 {
-    fsm->addMissingNuc();
+    fsm->addMissingNuc(fsm->stimuliOrder);
+    fsm->stimuliOrder = 0;
     fsm->outSeq += c;
     return fsm->stateNotN;
 }
 
 const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusN() const
 {
-    fsm->addMissingNuc();
+    fsm->addMissingNuc(fsm->stimuliOrder);
+    fsm->stimuliOrder = 0;
     fsm->ns = 1;
     return fsm->stateN;
 }
@@ -281,7 +269,8 @@ const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusN() 
 
 const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusEndSeq() const
 {
-    fsm->addMissingNuc();
+    fsm->addMissingNuc(fsm->stimuliOrder);
+    fsm->stimuliOrder = 0;
     return NULL;
 }
 

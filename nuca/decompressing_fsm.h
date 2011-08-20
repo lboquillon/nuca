@@ -22,10 +22,9 @@ decompressing_fsm.h: Nucleotides Compression Algorithms
 #ifndef DECOMPRESSING_FSM
 #define DECOMPRESSING_FSM
 
-#include <string>
 #include "fsm.h"
 
-class DecompressingFSM
+class DecompressingFSM : private Fsm
 {
 private:
     class State
@@ -86,16 +85,9 @@ private:
     const State* const stateEscapeSequenceChar;
     const State* const stateReadBit;
     const State* current;
-    std::string& outSeq;
-    std::string rareSeq;
     size_t nc;
     size_t nCounter;
     size_t bc;
-
-    void addMissingNuc()
-    {
-        outSeq += rareSeq.substr(0, nc);
-    }
 
     void addNs()
     {
@@ -108,13 +100,12 @@ private:
 
 public:
     DecompressingFSM(std::string& out)
-        : stateInitial(new StateInitial(this))
+        : Fsm(out)
+        , stateInitial(new StateInitial(this))
         , stateNuc(new StateNuc(this))
         , stateEscapeSequenceChar(new StateEscapeSequenceChar(this))
         , stateReadBit(new StateReadingNCount(this))
         , current(stateInitial)
-        , outSeq(out)
-        , rareSeq("TTT")
         , nc(0)
         , nCounter(0)
         , bc(0)
@@ -137,15 +128,15 @@ public:
             current = current->stimulusEscSeqChar();
         else
         {
-        	current = current->stimulusNuc(sti);   
+            current = current->stimulusNuc(sti);
         }
     }
 
-	void stimulate (EndSeqStimulus sti)
-	{
-		if (sti == EndSeq)
-			current->stimulusEndSeq();
-	}
+    void stimulate(EndSeqStimulus sti)
+    {
+        if (sti == EndSeq)
+            current->stimulusEndSeq();
+    }
 };
 
 const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
@@ -184,7 +175,7 @@ const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEndSeq() cons
 
 const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusNuc(char n) const
 {
-    fsm->addMissingNuc();
+    fsm->addMissingNuc(fsm->nc);
     fsm->outSeq += n;
     fsm->nc = 0;
     return fsm->stateNuc;
@@ -212,7 +203,7 @@ const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimul
 
 const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEndSeq() const
 {
-    fsm->addMissingNuc();
+    fsm->addMissingNuc(fsm->nc);
     return NULL;
 }
 
