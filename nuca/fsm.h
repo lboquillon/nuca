@@ -33,7 +33,7 @@ enum EndSeqStimulus
 class Fsm
 {
 protected:
-    std::string rareSeq;
+    const std::string rareSeq;
     std::string& outSeq;
 
     void addMissingNuc(size_t n)
