@@ -12,7 +12,7 @@ for i in glob('*_test.cpp'):
 	w.write (h.read() + '\nint main(int argc, char **argv) { ::testing::InitGoogleTest(&argc, argv); return RUN_ALL_TESTS();}')
 	h.close()
 	w.close()
-	system ('g++ ' + t + ' -o ' + i[:-4] + ' -lgtest -lpthread -lbiopp -DMILI_NAMESPACE -I../nuca')
+	system ('g++ ' + t + ' -o ' + i[:-4] + ' -lgtest -lpthread -lbiopp -Wall -ansi -Wextra -pedantic -DMILI_NAMESPACE -I../nuca')
 	remove (t)
 	
 	if path.exists (i[:-4]):
