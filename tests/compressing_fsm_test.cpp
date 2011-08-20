@@ -10,7 +10,7 @@ TEST(Compressing, compressingNs1)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         fsm.stimulate(*it);
 
-    fsm.stimulate(0);
+    fsm.stimulate(EndSeq);
 
     ASSERT_EQ(out, "TTTAAAATTCTTTAAAACTTATTTAAACGTATTTGGGGTTTGGTTATTTAAAA");
 }
@@ -25,7 +25,7 @@ TEST(Compressing, compressingNs2)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         fsm.stimulate(*it);
 
-    fsm.stimulate(0);
+    fsm.stimulate(EndSeq);
 
     ASSERT_EQ(out, "TTTAAAATTTAAAATTTAAAATTTGGGGACTG");
 }
@@ -40,7 +40,7 @@ TEST(Compressing, compressingNs3)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         fsm.stimulate(*it);
 
-    fsm.stimulate(0);
+    fsm.stimulate(EndSeq);
 
     ASSERT_EQ(out, "TTTGGGGTTTGGGGTTTGGGGTT");
 }
@@ -56,7 +56,7 @@ TEST(Compressing, compressingNs4)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         fsm.stimulate(*it);
 
-    fsm.stimulate(0);
+    fsm.stimulate(EndSeq);
 
     ASSERT_EQ(out, "TTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTGGGGTTTAAAA");
 }
