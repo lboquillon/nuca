@@ -107,11 +107,12 @@ private:
     void makeEscapeSequence()
     {
         char numb[5] = { '\0'};
-        char nuc[4] = { 'A', 'T', 'C', 'G' };
+        //char nuc[4] = { 'A', 'T', 'C', 'G' };
 
         for (int i = 3; i >= 0; i--)
         {
-            numb[i] = nuc[ns & 3];
+            numb[i] = valueToNuc(ns & 3);
+            //numb[i] = nuc[ns & 3];
             ns >>= 2;
         }
 

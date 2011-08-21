@@ -200,32 +200,8 @@ inline const DecompressingFSM::State* DecompressingFSM::StateReadingEscapeSequen
 inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusNuc(char n) const
 {
     const State* state;
-    char val;
 
-    switch (n)
-    {
-        case 'A':
-            val = 0;
-            break;
-
-        case 'T':
-            val = 1;
-            break;
-
-        case 'C':
-            val = 2;
-            break;
-
-        case 'G':
-            val = 3;
-            break;
-
-        default:
-            val = 0;
-    }
-
-
-    fsm->nCounter = (fsm->nCounter << 2) | val;
+    fsm->nCounter = (fsm->nCounter << 2) | fsm->nucToValue(n);
 
     if (fsm->genericCounter < 4)
     {
