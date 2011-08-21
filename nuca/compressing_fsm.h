@@ -95,7 +95,6 @@ private:
         }
     };
 
-
     const State* const stateInitial;
     const State* const stateNotN;
     const State* const stateN;
