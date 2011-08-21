@@ -32,6 +32,7 @@ enum EndSeqStimulus
 
 class Fsm
 {
+
 protected:
     const std::string rareSeq;
     std::string& outSeq;
@@ -41,14 +42,47 @@ protected:
         outSeq += rareSeq.substr(0, n);
     }
 
-public:
+    char valueToNuc(size_t value)
+    {
+        char nuc[4] = { 'A', 'T', 'C', 'G' };
+        return nuc[value];
+    }
+
+    size_t nucToValue(char n)
+    {
+        char val;
+
+        switch (n)
+        {
+            case 'A':
+                val = 0;
+                break;
+
+            case 'T':
+                val = 1;
+                break;
+
+            case 'C':
+                val = 2;
+                break;
+
+            case 'G':
+                val = 3;
+                break;
+
+            default:
+                val = 0;
+        }
+
+        return val;
+    }
+
     Fsm(std::string& out)
         : rareSeq("TTT"),
           outSeq(out)
     {
-        outSeq = "";
+        outSeq.clear();
     }
-
 };
 
 #endif
