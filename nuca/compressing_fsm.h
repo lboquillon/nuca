@@ -158,10 +158,9 @@ public:
         }
     }
 
-    void stimulate(EndSeqStimulus sti)
+    void stimulate(EndSeqStimulus)
     {
-        if (sti == EndSeq)
-            current->stimulusEndSeq();
+        current->stimulusEndSeq();
     }
 
 };
