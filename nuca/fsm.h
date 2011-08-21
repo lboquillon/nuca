@@ -42,13 +42,17 @@ protected:
         outSeq += rareSeq.substr(0, n);
     }
 
-    char valueToNuc(size_t value)
+    static char valueToNuc(size_t value)
     {
-        char nuc[4] = { 'A', 'T', 'C', 'G' };
+        static const char* nuc = "ATCG";
+
+        if (value >= sizeof(nuc) / sizeof(nuc[0]))
+            throw "Invalid value";
+
         return nuc[value];
     }
 
-    size_t nucToValue(char n)
+    static size_t nucToValue(char n)
     {
         char val;
 
@@ -71,7 +75,7 @@ protected:
                 break;
 
             default:
-                val = 0;
+                throw "Invalid Nuc";
         }
 
         return val;
