@@ -32,13 +32,12 @@ private:
     protected:
         DecompressingFSM* const fsm;
     public:
-        State(DecompressingFSM* dcfsm) : fsm(dcfsm)
+        State(DecompressingFSM* dcfsm)
+            : fsm(dcfsm)
         {
         }
         virtual ~State() { }
-
         virtual const State* stimulusNuc(char) const = 0;
-        virtual const State* stimulusEscSeqChar() const = 0;
         virtual const State* stimulusEndSeq() const = 0;
     };
 
@@ -46,10 +45,10 @@ private:
     {
     private:
         const State* stimulusNuc(char) const;
-        const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateInitial(DecompressingFSM* dcfsm) : State(dcfsm)
+        StateInitial(DecompressingFSM* dcfsm)
+            : State(dcfsm)
         {
         }
     };
@@ -58,10 +57,10 @@ private:
     {
     private:
         const State* stimulusNuc(char) const;
-        const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateNuc(DecompressingFSM* dcfsm): State(dcfsm)
+        StateNuc(DecompressingFSM* dcfsm)
+            : State(dcfsm)
         {
         }
     };
@@ -70,10 +69,10 @@ private:
     {
     private:
         const State* stimulusNuc(char) const;
-        const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateEscapeSequenceChar(DecompressingFSM* dcfsm) : State(dcfsm)
+        StateEscapeSequenceChar(DecompressingFSM* dcfsm)
+            : State(dcfsm)
         {
         }
     };
@@ -82,20 +81,32 @@ private:
     {
     private:
         const State* stimulusNuc(char) const;
-        const State* stimulusEscSeqChar() const;
         const State* stimulusEndSeq() const;
     public:
-        StateReadingNCount(DecompressingFSM* dcfsm) : State(dcfsm)
+        StateReadingNCount(DecompressingFSM* dcfsm)
+            : State(dcfsm)
+        {
+        }
+    };
+
+    class StateReadingEscapeSequence : public State
+    {
+    private:
+        const State* stimulusNuc(char) const;
+        const State* stimulusEndSeq() const;
+    public:
+        StateReadingEscapeSequence(DecompressingFSM* dcfsm)
+            : State(dcfsm)
         {
         }
     };
 
     const State* const stateInitial;
     const State* const stateNuc;
-    const State* const stateEscapeSequenceChar;
+    const State* const stateReadingEscapeChar;
     const State* const stateReadBit;
     const State* current;
-    size_t nc;
+    size_t genericCounter;
     size_t nCounter;
     size_t bc;
 
@@ -112,12 +123,11 @@ public:
         : Fsm(out),
           stateInitial(new StateInitial(this)),
           stateNuc(new StateNuc(this)),
-          stateEscapeSequenceChar(new StateEscapeSequenceChar(this)),
+          stateReadingEscapeChar(new StateReadingEscapeSequence(this)),
           stateReadBit(new StateReadingNCount(this)),
           current(stateInitial),
-          nc(0),
-          nCounter(0),
-          bc(0)
+          genericCounter(0),
+          nCounter(0)
     {
     }
 
@@ -125,7 +135,7 @@ public:
     {
         delete stateInitial;
         delete stateNuc;
-        delete stateEscapeSequenceChar;
+        delete stateReadingEscapeChar;
         delete stateReadBit;
     }
 
@@ -134,14 +144,7 @@ public:
         if (current == NULL)
             throw "Invalid State";
 
-        if (sti == rareSeq[nc] && bc == 0)
-        {
-            current = current->stimulusEscSeqChar();
-        }
-        else
-        {
-            current = current->stimulusNuc(sti);
-        }
+        current = current->stimulusNuc(sti);
     }
 
     void stimulate(EndSeqStimulus)
@@ -152,14 +155,20 @@ public:
 
 inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
 {
-    fsm->outSeq += n;
-    return fsm->stateNuc;
-}
+    const State* state;
 
-inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEscSeqChar() const
-{
-    fsm->nc = 1;
-    return fsm->stateEscapeSequenceChar;
+    if (n == fsm->rareSeq[0])
+    {
+        fsm->genericCounter = 1;
+        state = fsm->stateReadingEscapeChar;
+    }
+    else
+    {
+        fsm->outSeq += n;
+        state = fsm->stateNuc;
+    }
+
+    return state;
 }
 
 inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEndSeq() const
@@ -169,14 +178,20 @@ inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEn
 
 inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusNuc(char n) const
 {
-    fsm->outSeq += n;
-    return this;
-}
+    const State* state;
 
-inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEscSeqChar() const
-{
-    fsm->nc = 1;
-    return fsm->stateEscapeSequenceChar;
+    if (n == fsm->rareSeq[0])
+    {
+        fsm->genericCounter = 1;
+        state = fsm->stateReadingEscapeChar;
+    }
+    else
+    {
+        fsm->outSeq += n;
+        state = this;
+    }
+
+    return state;
 }
 
 inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEndSeq() const
@@ -184,35 +199,37 @@ inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusEndSeq
     return NULL;
 }
 
-inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusNuc(char n) const
-{
-    fsm->addMissingNuc(fsm->nc);
-    fsm->outSeq += n;
-    fsm->nc = 0;
-    return fsm->stateNuc;
-}
-
-inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEscSeqChar() const
+inline const DecompressingFSM::State* DecompressingFSM::StateReadingEscapeSequence::stimulusNuc(char n) const
 {
     const State* state;
 
-    if (fsm->nc < fsm->rareSeq.size() - 1)
+    if (n == fsm->rareSeq[fsm->genericCounter])
     {
-        fsm->nc++;
-        state = this;
+        if (fsm->genericCounter < fsm->rareSeq.size() - 1)
+        {
+            fsm->genericCounter++;
+            state = this;
+        }
+        else
+        {
+            fsm->genericCounter = 1;
+            state = fsm->stateReadBit;
+        }
     }
     else
     {
-        fsm->bc = 1;
-        state = fsm->stateReadBit;
+        fsm->addMissingNuc(fsm->genericCounter);
+        fsm->outSeq += n;
+        fsm->genericCounter = 0;
+        state = fsm->stateNuc;
     }
 
     return state;
 }
 
-inline const DecompressingFSM::State* DecompressingFSM::StateEscapeSequenceChar::stimulusEndSeq() const
+inline const DecompressingFSM::State* DecompressingFSM::StateReadingEscapeSequence::stimulusEndSeq() const
 {
-    fsm->addMissingNuc(fsm->nc);
+    fsm->addMissingNuc(fsm->genericCounter);
     return NULL;
 }
 
@@ -246,27 +263,21 @@ inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stim
 
     fsm->nCounter = (fsm->nCounter << 2) | val;
 
-    if (fsm->bc < 4)
+    if (fsm->genericCounter < 4)
     {
-        ++fsm->bc;
+        ++fsm->genericCounter;
         state = this;
     }
     else
     {
         fsm->addNs();
-        fsm->bc = 0;
+        fsm->genericCounter = 0;
         fsm->nCounter = 0;
         state = fsm->stateInitial;
     }
 
     return state;
 }
-
-inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEscSeqChar() const
-{
-    return NULL;
-}
-
 inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stimulusEndSeq() const
 {
     return NULL;

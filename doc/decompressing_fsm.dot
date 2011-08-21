@@ -3,17 +3,16 @@ digraph decompressing_fsm {
 	size = "10";
 	node [shape = doublecircle] start exit;
 	node [shape = circle];
-
 	start -> nuc [label = "nuc / AddNuc"];
 	start -> rare [label = "rareChar / rc = 1"];
 	start -> exit [label = "endSeq"];
 	nuc -> nuc [label = "nuc / AddNuc"];
 	nuc -> rare [label = "rareChar / rc = 1"];
 	nuc -> exit [label = "endSeq"];
-	rare -> exit [label = "endSeq / AddMissingNuc"];
-	rare -> nuc [label = "nuc / {AddMissingNuc; AddNuc; rc = 0}"];
-	rare -> rare [label = "rareChar / rc++"];
-	rare -> ReadN [label = "rc = len(rareSeq) - 1 / rc = 0"];
+	readEscS -> exit [label = "endSeq / AddMissingNuc"];
+	readEscS -> nuc [label = "nuc != rare[gc]  / {AddMissingNuc; AddNuc; gc = 0}"];
+	readEscS -> readEscS [label = "nuc / gc++"];
+	readEscS -> ReadN [label = "rc = len(rareSeq) - 1 / gc = 0"];
 	ReadN -> ReadN [label = "N Nuc / NucToNumber"];
 	ReadN -> start [label = "4th N Nuc / {NucToNumber; AddNuc; Clean}"];
 }
