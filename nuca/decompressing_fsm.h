@@ -19,6 +19,7 @@ decompressing_fsm.h: Nucleotides Compression Algorithms
 
     NOTE: This file is in prototype stage, and is under active development.
 */
+
 #ifndef DECOMPRESSING_FSM_H
 #define DECOMPRESSING_FSM_H
 
@@ -36,21 +37,11 @@ private:
             : fsm(dcfsm)
         {
         }
-        virtual ~State() { }
-        virtual const State* stimulusNuc(char) const = 0;
-        virtual const State* stimulusEndSeq() const = 0;
-    };
-
-    class StateInitial : public State
-    {
-    private:
-        const State* stimulusNuc(char) const;
-        const State* stimulusEndSeq() const;
-    public:
-        StateInitial(DecompressingFSM* dcfsm)
-            : State(dcfsm)
+        virtual ~State()
         {
         }
+        virtual const State* stimulusNuc(char) const = 0;
+        virtual const State* stimulusEndSeq() const = 0;
     };
 
     class StateNuc : public State
@@ -101,14 +92,12 @@ private:
         }
     };
 
-    const State* const stateInitial;
     const State* const stateNuc;
     const State* const stateReadingEscapeChar;
     const State* const stateReadBit;
     const State* current;
     size_t genericCounter;
     size_t nCounter;
-    size_t bc;
 
     void addNs()
     {
@@ -121,11 +110,10 @@ private:
 public:
     DecompressingFSM(std::string& out)
         : Fsm(out),
-          stateInitial(new StateInitial(this)),
           stateNuc(new StateNuc(this)),
           stateReadingEscapeChar(new StateReadingEscapeSequence(this)),
           stateReadBit(new StateReadingNCount(this)),
-          current(stateInitial),
+          current(stateNuc),
           genericCounter(0),
           nCounter(0)
     {
@@ -133,7 +121,6 @@ public:
 
     ~DecompressingFSM()
     {
-        delete stateInitial;
         delete stateNuc;
         delete stateReadingEscapeChar;
         delete stateReadBit;
@@ -152,29 +139,6 @@ public:
         current->stimulusEndSeq();
     }
 };
-
-inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusNuc(char n) const
-{
-    const State* state;
-
-    if (n == fsm->rareSeq[0])
-    {
-        fsm->genericCounter = 1;
-        state = fsm->stateReadingEscapeChar;
-    }
-    else
-    {
-        fsm->outSeq += n;
-        state = fsm->stateNuc;
-    }
-
-    return state;
-}
-
-inline const DecompressingFSM::State* DecompressingFSM::StateInitial::stimulusEndSeq() const
-{
-    return NULL;
-}
 
 inline const DecompressingFSM::State* DecompressingFSM::StateNuc::stimulusNuc(char n) const
 {
@@ -273,7 +237,7 @@ inline const DecompressingFSM::State* DecompressingFSM::StateReadingNCount::stim
         fsm->addNs();
         fsm->genericCounter = 0;
         fsm->nCounter = 0;
-        state = fsm->stateInitial;
+        state = fsm->stateNuc;
     }
 
     return state;
