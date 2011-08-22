@@ -44,7 +44,7 @@ protected:
 
     static char valueToNuc(size_t value)
     {
-        static const char* nuc = "ATCG";
+        static const char nuc[] = "ATCG";
 
         if (value >= sizeof(nuc) / sizeof(nuc[0]))
             throw "Invalid value";
