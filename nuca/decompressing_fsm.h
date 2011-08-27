@@ -23,6 +23,7 @@ decompressing_fsm.h: Nucleotides Compression Algorithms
 #ifndef DECOMPRESSING_FSM_H
 #define DECOMPRESSING_FSM_H
 
+#include <stack>
 #include "fsm.h"
 
 class DecompressingFSM : private Fsm
@@ -98,6 +99,7 @@ private:
     const State* current;
     size_t genericCounter;
     size_t nCounter;
+    std::stack<const State*> stiStack;
 
     void addNs()
     {
@@ -132,6 +134,12 @@ public:
             throw "Invalid State";
 
         current = current->stimulusNuc(sti);
+
+        while (!stiStack.empty())
+        {
+            current = (stiStack.top())->stimulusNuc(sti);
+            stiStack.pop();
+        }
     }
 
     void stimulate(EndSeqStimulus)
@@ -183,7 +191,17 @@ inline const DecompressingFSM::State* DecompressingFSM::StateReadingEscapeSequen
     else
     {
         fsm->addMissingNuc(fsm->genericCounter);
-        fsm->outSeq += n;
+
+        if (n == fsm->rareSeq[0])
+        {
+            fsm->stiStack.push(fsm->stateNuc);
+        }
+
+        else
+        {
+            fsm->outSeq += n;
+        }
+
         fsm->genericCounter = 0;
         state = fsm->stateNuc;
     }

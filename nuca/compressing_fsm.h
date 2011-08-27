@@ -24,6 +24,7 @@ compressing_fsm.h: Nucleotides Compression Algorithms
 #define COMPRESSING_FSM_H
 
 #include "fsm.h"
+#include <stack>
 
 class CompressingFSM : private Fsm
 {
@@ -40,20 +41,7 @@ private:
         virtual const State* stimulusNotN(char) const = 0;
         virtual const State* stimulusN() const = 0;
         virtual const State* stimulusEndSeq() const = 0;
-        virtual const State* stimulusRareSeqChar() const = 0;
         virtual ~State() { }
-    };
-
-    class StateInitial : public State
-    {
-    private:
-        const State* stimulusNotN(char) const;
-        const State* stimulusN() const;
-        const State* stimulusEndSeq() const;
-        const State* stimulusRareSeqChar() const;
-    public:
-        StateInitial(CompressingFSM* m) : State(m)
-        { }
     };
 
     class StateNotN : public State
@@ -62,7 +50,6 @@ private:
         const State* stimulusNotN(char) const;
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
-        const State* stimulusRareSeqChar() const;
     public:
         StateNotN(CompressingFSM* m) : State(m)
         {
@@ -75,33 +62,31 @@ private:
         const State* stimulusNotN(char) const;
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
-        const State* stimulusRareSeqChar() const;
     public:
         StateN(CompressingFSM* m) : State(m)
         {
         }
     };
 
-    class StateRareSequenceChar : public State
+    class StateReadingSequence : public State
     {
     private:
         const State* stimulusNotN(char) const;
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
-        const State* stimulusRareSeqChar() const;
     public:
-        StateRareSequenceChar(CompressingFSM* m) : State(m)
+        StateReadingSequence(CompressingFSM* m) : State(m)
         {
         }
     };
 
-    const State* const stateInitial;
     const State* const stateNotN;
     const State* const stateN;
-    const State* const stateRareSequenceChar;
+    const State* const stateReadingSequence;
     const State* current;
     size_t ns;
     size_t stimuliOrder;
+    std::stack<const State*> stiStack;
 
     void makeEscapeSequence()
     {
@@ -119,21 +104,19 @@ private:
 public:
     CompressingFSM(std::string& out)
         : Fsm(out),
-          stateInitial(new StateInitial(this)),
           stateNotN(new StateNotN(this)),
           stateN(new StateN(this)),
-          stateRareSequenceChar(new StateRareSequenceChar(this)),
-          current(stateInitial),
+          stateReadingSequence(new StateReadingSequence(this)),
+          current(stateNotN),
           stimuliOrder(0)
     {
     }
 
     ~CompressingFSM()
     {
-        delete stateInitial;
         delete stateNotN;
         delete stateN;
-        delete stateRareSequenceChar;
+        delete stateReadingSequence;
     }
 
     void stimulate(char sti)
@@ -141,19 +124,21 @@ public:
         if (current == NULL)
             throw "Invalid State";
 
-        if (sti == rareSeq[stimuliOrder])
-            current = current->stimulusRareSeqChar();
+        if (sti == 'N')
+        {
+            current = current->stimulusN();
+        }
         else
         {
-            switch (sti)
-            {
-                case 'N':
-                    current = current->stimulusN();
-                    break;
-                default:
-                    current = current->stimulusNotN(sti);
-            }
+            current = current->stimulusNotN(sti);
         }
+
+        while (!stiStack.empty())
+        {
+            current = (stiStack.top())->stimulusNotN(sti);
+            stiStack.pop();
+        }
+
     }
 
     void stimulate(EndSeqStimulus)
@@ -163,35 +148,23 @@ public:
 
 };
 
-inline const CompressingFSM::State* CompressingFSM::StateInitial::stimulusNotN(char c) const
-{
-    fsm->outSeq += c;
-    return fsm->stateNotN;
-}
-
-inline const CompressingFSM::State* CompressingFSM::StateInitial::stimulusN() const
-{
-    fsm->ns = 1;
-    return fsm->stateN;
-}
-
-
-inline const CompressingFSM::State* CompressingFSM::StateInitial::stimulusEndSeq() const
-{
-    return NULL;
-}
-
-inline const CompressingFSM::State* CompressingFSM::StateInitial::stimulusRareSeqChar() const
-{
-    fsm->stimuliOrder = 1;
-    fsm->ns = 0;
-    return fsm->stateRareSequenceChar;
-}
-
 inline const CompressingFSM::State* CompressingFSM::StateNotN::stimulusNotN(char c) const
 {
-    fsm->outSeq += c;
-    return this;
+    const State* state;
+
+    if (c == fsm->rareSeq[0])
+    {
+        fsm->ns = 0;
+        fsm->stimuliOrder = 1;
+        state = fsm->stateReadingSequence;
+    }
+    else
+    {
+        fsm->outSeq += c;
+        state = this;
+    }
+
+    return state;
 }
 
 inline const CompressingFSM::State* CompressingFSM::StateNotN::stimulusN() const
@@ -205,20 +178,29 @@ inline const CompressingFSM::State* CompressingFSM::StateNotN::stimulusEndSeq() 
     return NULL;
 }
 
-inline const CompressingFSM::State* CompressingFSM::StateNotN::stimulusRareSeqChar() const
-{
-    fsm->stimuliOrder = 1;
-    fsm->ns = 0;
-    return fsm->stateRareSequenceChar;
-
-}
-
 inline const CompressingFSM::State* CompressingFSM::StateN::stimulusNotN(char c) const
 {
+    const State* state;
+    bool b;
+
+    if (c == fsm->rareSeq[0])
+    {
+        fsm->stiStack.push(fsm->stateNotN);
+        b = false;
+    }
+    else
+    {
+        b = true;
+    }
+
     fsm->makeEscapeSequence();
     fsm->ns = 0;
-    fsm->outSeq += c;
-    return fsm->stateNotN;
+    state = fsm->stateNotN;
+
+    if (true == b)
+        fsm->outSeq += c;
+
+    return state;
 }
 
 
@@ -243,23 +225,44 @@ inline const CompressingFSM::State* CompressingFSM::StateN::stimulusEndSeq() con
     return NULL;
 }
 
-inline const CompressingFSM::State* CompressingFSM::StateN::stimulusRareSeqChar() const
+inline const CompressingFSM::State* CompressingFSM::StateReadingSequence::stimulusNotN(char c) const
 {
-    fsm->stimuliOrder = 1;
-    fsm->makeEscapeSequence();
-    fsm->ns = 0;
-    return fsm->stateRareSequenceChar;
+    const State* state;
+
+    if (c == fsm->rareSeq[fsm->stimuliOrder])
+    {
+        if (fsm->stimuliOrder < fsm->rareSeq.size() - 1)
+        {
+            fsm->stimuliOrder++;
+            state = this;
+        }
+        else
+        {
+            fsm->stimuliOrder = 0;
+            fsm->makeEscapeSequence();
+            state = fsm->stateNotN;
+        }
+    }
+    else
+    {
+        fsm->addMissingNuc(fsm->stimuliOrder);
+
+        if (c == fsm->rareSeq[0])
+        {
+            fsm->stimuliOrder = 0;
+            fsm->stiStack.push(fsm->stateNotN);
+        }
+        else
+        {
+            fsm->outSeq += c;
+            state = fsm->stateNotN;
+        }
+    }
+
+    return state;
 }
 
-inline const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusNotN(char c) const
-{
-    fsm->addMissingNuc(fsm->stimuliOrder);
-    fsm->stimuliOrder = 0;
-    fsm->outSeq += c;
-    return fsm->stateNotN;
-}
-
-inline const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusN() const
+inline const CompressingFSM::State* CompressingFSM::StateReadingSequence::stimulusN() const
 {
     fsm->addMissingNuc(fsm->stimuliOrder);
     fsm->stimuliOrder = 0;
@@ -268,30 +271,11 @@ inline const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimu
 }
 
 
-inline const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusEndSeq() const
+inline const CompressingFSM::State* CompressingFSM::StateReadingSequence::stimulusEndSeq() const
 {
     fsm->addMissingNuc(fsm->stimuliOrder);
     fsm->stimuliOrder = 0;
     return NULL;
-}
-
-inline const CompressingFSM::State* CompressingFSM::StateRareSequenceChar::stimulusRareSeqChar() const
-{
-    const State* state;
-
-    if (fsm->stimuliOrder < fsm->rareSeq.size() - 1)
-    {
-        fsm->stimuliOrder++;
-        state = this;
-    }
-    else
-    {
-        fsm->stimuliOrder = 0;
-        fsm->makeEscapeSequence();
-        state = fsm->stateInitial;
-    }
-
-    return state;
 }
 
 #endif
