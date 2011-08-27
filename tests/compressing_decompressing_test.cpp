@@ -21,11 +21,12 @@ compressing_decompressing_test.cpp: Nucleotides Compression Algorithms
 */
 
 #include <gtest/gtest.h>
+#include <iostream>
 #include "nuca.h"
 
 TEST(CompressingDecompressing, compressingDecompressing1)
 {
-    const std::string in = "CTGANNNNNNTTCGAAANNNNNNT";
+    const std::string in = "ATNATATCTGANNNNNNTTCGAAANNNNNNT";
     std::string strcm;
     std::string out;
 
@@ -48,6 +49,28 @@ TEST(CompressingDecompressing, compressingDecompressing1)
 TEST(CompressingDecompressing, compressingDecompressing2)
 {
     const std::string in = "CTGANNNNNNTTCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATTTTGAAANNNNNNT";
+    std::string strcm;
+    std::string out;
+
+    DecompressingFSM dcpr(out);
+    CompressingFSM cmpr(strcm);
+
+    for (std::string::const_iterator it = in.begin(); it < in.end(); ++it)
+        cmpr.stimulate(*it);
+
+    cmpr.stimulate(EndSeq);
+
+    for (std::string::iterator it = strcm.begin(); it < strcm.end(); ++it)
+        dcpr.stimulate(*it);
+
+    dcpr.stimulate(EndSeq);
+
+    ASSERT_EQ(in, out);
+}
+
+TEST(CompressingDecompressing, compressingDecompressing3)
+{
+    const std::string in = "CTACACTANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCTANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTTNCTA";
     std::string strcm;
     std::string out;
 
