@@ -82,7 +82,7 @@ protected:
     }
 
     Fsm(std::string& out)
-        : rareSeq("TTT"),
+        : rareSeq("ACT"),
           outSeq(out)
     {
         outSeq.clear();
