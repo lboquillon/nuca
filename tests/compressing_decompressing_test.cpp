@@ -21,7 +21,6 @@ compressing_decompressing_test.cpp: Nucleotides Compression Algorithms
 */
 
 #include <gtest/gtest.h>
-#include <iostream>
 #include "nuca.h"
 
 TEST(CompressingDecompressing, compressingDecompressing1)
