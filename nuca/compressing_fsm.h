@@ -23,8 +23,8 @@ compressing_fsm.h: Nucleotides Compression Algorithms
 #ifndef COMPRESSING_FSM_H
 #define COMPRESSING_FSM_H
 
-#include "fsm.h"
 #include <stack>
+#include "fsm.h"
 
 class CompressingFSM : private Fsm
 {
@@ -181,23 +181,23 @@ inline const CompressingFSM::State* CompressingFSM::StateNotN::stimulusEndSeq() 
 inline const CompressingFSM::State* CompressingFSM::StateN::stimulusNotN(char c) const
 {
     const State* state;
-    bool b;
+    bool isNotSeqChar;
 
     if (c == fsm->rareSeq[0])
     {
         fsm->stiStack.push(fsm->stateNotN);
-        b = false;
+        isNotSeqChar = false;
     }
     else
     {
-        b = true;
+        isNotSeqChar = true;
     }
 
     fsm->makeEscapeSequence();
     fsm->ns = 0;
     state = fsm->stateNotN;
 
-    if (true == b)
+    if (isNotSeqChar)
         fsm->outSeq += c;
 
     return state;
