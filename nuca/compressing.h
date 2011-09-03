@@ -192,6 +192,7 @@ public:
     {
         flush();
     }
+
     void close()
     {
         flush();

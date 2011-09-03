@@ -25,7 +25,7 @@ nuca.h: Nucleotides Compression Algorithms
 
 #include "decompressing_fsm.h"
 #include "compressing_fsm.h"
-#include "comp.h"
+#include "compressing.h"
 
 #endif
 
