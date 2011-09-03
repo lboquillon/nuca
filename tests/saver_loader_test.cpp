@@ -25,10 +25,10 @@ saver_loader_test.cpp: Nucleotides Compression Algorithms
 
 TEST(saver_loader, equalStr1)
 {
-    const NucSequence in("ATTCCTTGTGGTTTCCAAGGTTCTCTCTAGTCCTGAC");
+    const NucSequence in("ATTTTGTGACGTTTCCAAGGTTCATCTCTAGTCCTGAC");
     NucSequence out;
     Saver saver("archivo.out");
-    Storer<Saver> storer(saver, in.length());
+    Storer<Saver> storer(saver);
     storeSeq(storer, in);
 
     Loader loader("archivo.out");
@@ -43,7 +43,71 @@ TEST(saver_loader, equalStr2)
     const NucSequence in("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGGGGGGGGGGGGGGGGGGGGGGGGGGGACTGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGTCAGTCA");
     NucSequence out;
     Saver saver("archivo.out");
-    Storer<Saver> storer(saver, in.length());
+    Storer<Saver> storer(saver);
+    storeSeq(storer, in);
+
+    Loader loader("archivo.out");
+    Retriever<Loader> retriever(loader);
+    loadSeq(retriever, out);
+
+    ASSERT_EQ(in, out);
+}
+
+TEST(saver_loader, equalStr3)
+{
+    // 4 Nuc in the last byte
+    const NucSequence in("ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG");
+    NucSequence out;
+    Saver saver("archivo.out");
+    Storer<Saver> storer(saver);
+    storeSeq(storer, in);
+
+    Loader loader("archivo.out");
+    Retriever<Loader> retriever(loader);
+    loadSeq(retriever, out);
+
+    ASSERT_EQ(in, out);
+}
+
+TEST(saver_loader, equalStr4)
+{
+    // 3 Nuc in the last byte
+    const NucSequence in("ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACT");
+    NucSequence out;
+    Saver saver("archivo.out");
+    Storer<Saver> storer(saver);
+    storeSeq(storer, in);
+
+    Loader loader("archivo.out");
+    Retriever<Loader> retriever(loader);
+    loadSeq(retriever, out);
+
+    ASSERT_EQ(in, out);
+}
+
+TEST(saver_loader, equalStr5)
+{
+    // 2 Nuc in the last byte
+    const NucSequence in("ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGAC");
+    NucSequence out;
+    Saver saver("archivo.out");
+    Storer<Saver> storer(saver);
+    storeSeq(storer, in);
+
+    Loader loader("archivo.out");
+    Retriever<Loader> retriever(loader);
+    loadSeq(retriever, out);
+
+    ASSERT_EQ(in, out);
+}
+
+TEST(saver_loader, equalStr6)
+{
+    // 1 Nuc in the last byte
+    const NucSequence in("ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGA");
+    NucSequence out;
+    Saver saver("archivo.out");
+    Storer<Saver> storer(saver);
     storeSeq(storer, in);
 
     Loader loader("archivo.out");
