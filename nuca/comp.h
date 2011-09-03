@@ -23,6 +23,7 @@ comp.h: Nucleotides Compression Algorithms
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <queue>
 #include <biopp/bio_molecular/bio_molecular.h>
 
 using namespace std;
@@ -35,34 +36,57 @@ template<class User>
 class Retriever
 {
     User& u;
+    bool aux_ret;
     size_t current_bit;
-    size_t size;
     BufferType buffer;
     typedef unsigned int Bits;
     static const Bits DataSize = 2;
     static const Bits TotalUsedBits = sizeof(buffer) << 3;
+    std::queue<BufferType> pending;
+    size_t size;
 
     void reload()
     {
+        buffer = pending.front();
+        pending.pop();
+
         char tmp;
-        u.load(tmp);
-        buffer = tmp;
+        aux_ret = u.load(tmp);
+
+        if (aux_ret)
+        {
+            pending.push(tmp);
+        }
+        else
+        {
+            size = size_t (pending.front());
+            pending.pop();
+        }
+
         current_bit = 0;
     }
 public:
+
     typedef unsigned int Data;
 
-    Retriever(User& u) : u(u), current_bit(0)
+    Retriever(User& u)
+        : u(u),
+          aux_ret(true),
+          current_bit(8)
     {
-        // the first data is the size
-        u.load(size);
-        current_bit = 8;
+
+        char re;
+        u.load(re);
+        pending.push(re);
+        u.load(re);
+        pending.push(re);
+
     }
 
     bool get(Data& data)
     {
-        const bool ret = (size > 0);
-        if (ret)
+        bool ret;
+        if (aux_ret || size >= 1)
         {
             if (current_bit == 8)
                 reload();
@@ -72,8 +96,16 @@ public:
             data = buffer & 0x3;
             current_bit += DataSize;
 
-            size--;
+            if (!aux_ret)
+                --size;
+
+            ret = true;
         }
+        else
+        {
+            ret = false;
+        }
+
         return ret;
     }
 };
@@ -89,25 +121,25 @@ public:
             throw string(fname) + " not found";
     }
 
-    void load(char& buffer)
+    bool load(char& buffer)
     {
-//    for( size_t byte = 0; byte < sizeof(buffer); ++byte )
-//    {
+        bool ret;
         char tmp;
-        if (!(f.get(tmp)))
-            throw "Cannot read";
 
-        buffer = tmp;
+        if (f.get(tmp))
+        {
+            buffer = tmp;
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+        }
+
         cerr << std::hex << (buffer & 0xff) << endl;
 //      buffer >>= 8;
+        return ret;
 //    }
-    }
-
-    void load(size_t& number)
-    {
-        char* const number_chr = reinterpret_cast<char*>(&number);
-        for (size_t byte = 0; byte < sizeof(number); ++byte)
-            load(number_chr[byte]);
     }
 };
 
@@ -135,16 +167,11 @@ class Storer
 public:
     typedef unsigned int Data;
 
-    Storer(User& u, size_t size) : u(u)
+    Storer(User& u)
+        : u(u),
+          free_bits(TotalFreeBits),
+          buffer(0)
     {
-        // the first data is the size
-//      const Bits size_in_bits = size % 8;
-//    buffer = size_in_bits;
-        //buffer = size;
-        buffer = 0;
-        free_bits = TotalFreeBits;
-        u.save(size);
-        //flush();
     }
 
     ~Storer()
@@ -161,10 +188,23 @@ public:
         free_bits -= DataSize;
     }
 
+    void end()
+    {
+        flush();
+    }
     void close()
     {
         flush();
         u.close();
+    }
+
+    void set_size(Data size)
+    {
+        size_t n = size % 4;
+        // should be save as char
+        // to not add extra bits
+        // e.g (2 0 0 0)
+        u.save(char(n == 0 ? 4 : n));
     }
 };
 
@@ -199,7 +239,6 @@ public:
     }
 };
 
-
 //static void loadSeq(const char* fname, NucSequence& seq);
 template <class User>
 static void storeSeq(Storer<User>& st, const NucSequence& seq);
@@ -215,6 +254,11 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
     {
         st.add(BufferType(to_nuc(*it)));
     }
+
+    // should be called to flush time before end the
+    // scope and not depend of dtor..  to later save the size
+    st.end();
+    st.set_size(sequ.size());
 
     st.close();
 }
