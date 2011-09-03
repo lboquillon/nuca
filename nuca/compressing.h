@@ -199,13 +199,9 @@ public:
         u.close();
     }
 
-    void set_size(Data size)
+    void set_last_byte_nuc(char size)
     {
-        size_t n = size % 4;
-        // should be save as char
-        // to not add extra bits
-        // e.g (2 0 0 0)
-        u.save(char(n == 0 ? 4 : n));
+        u.save(size);
     }
 };
 
@@ -259,7 +255,8 @@ inline void storeSeq(Storer<User>& st, const NucSequence& seq)
     // should be called to flush time before end the
     // scope and not depend of dtor..  to later save the size
     st.end();
-    st.set_size(sequ.size());
+    char n = char(sequ.size() % 4);
+    st.set_last_byte_nuc(n == 0 ? 4 : n);
 
     st.close();
 }
