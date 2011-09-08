@@ -1,5 +1,5 @@
 /*
-compressing_fsm.h: Nucleotides Compression Algorithms
+remove_ns.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
