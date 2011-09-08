@@ -35,12 +35,11 @@ class Fsm
 
 protected:
     const std::string rareSeq;
-    std::string& outSeq;
 
-    void addMissingNuc(size_t n)
+    /*void addMissingNuc(size_t n)
     {
         outSeq += rareSeq.substr(0, n);
-    }
+    }*/
 
     static char valueToNuc(size_t value)
     {
@@ -81,11 +80,9 @@ protected:
         return val;
     }
 
-    Fsm(std::string& out)
-        : rareSeq("ACT"),
-          outSeq(out)
+    Fsm()
+        : rareSeq("ACT")
     {
-        outSeq.clear();
     }
 };
 
