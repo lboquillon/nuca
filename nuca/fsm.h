@@ -81,7 +81,7 @@ protected:
     }
 
     Fsm()
-        : rareSeq("ACT")
+        : rareSeq("ACTG")
     {
     }
 };

@@ -25,8 +25,6 @@ remove_ns.h: Nucleotides Compression Algorithms
 
 #include <stack>
 #include "fsm.h"
-#include <iostream>
-
 
 using namespace std;
 
@@ -128,15 +126,6 @@ public:
     void receiveData(EndSeqStimulus);
     void flush(char);
     void end();
-
-// only for the test layer
-// ===================================
-    void setString(std::string& str)
-    {
-        LowerLayer::setString(str);
-    }
-// ====================================
-
 };
 
 template<class LowerLayer>

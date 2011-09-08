@@ -1,5 +1,5 @@
 /*
-saver.h: Nucleotides Compression Algorithms
+ostream_saver.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Daniel Gutson and Leonardo Boquillon, FuDePAN
 
     This file is part of Nuca.
@@ -31,37 +31,43 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class Saver : public LowerLayer
+class OstreamSaver : public LowerLayer
 {
-    std::ofstream of;
+    std::ostream* of;
 public:
     typedef char DataType;
 
-    Saver()
-        : of("archivo.out", ios_base::binary)
+    OstreamSaver()
+        : of(NULL)
     {}
 
+	void setOstream (std::ostream &);
     void receiveData(DataType);
-    void close();
     void end(DataType);
 };
 
 template<class LowerLayer>
-inline void Saver<LowerLayer>::receiveData(DataType buffer)
+inline void OstreamSaver<LowerLayer>::receiveData(DataType buffer)
 {
     for (size_t byte = 0; byte < sizeof(buffer); ++byte)
     {
-        of.put(static_cast<char>(buffer & 0xff));
+        of->put(static_cast<char>(buffer & 0xff));
         //cerr << std::hex << (buffer & 0xff) << endl;
         buffer >>= 8;
     }
 }
 
 template<class LowerLayer>
-inline void Saver<LowerLayer>::end(DataType n)
+inline void OstreamSaver<LowerLayer>::end(DataType n)
 {
     receiveData(n);
-    of.close();
+    //of->close(); close only for ofstream, what is going to do?
+}
+
+template<class LowerLayer>
+inline void OstreamSaver<LowerLayer>::setOstream (std::ostream & ostr)
+{
+	of = &ostr;
 }
 
 #endif
