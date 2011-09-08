@@ -41,7 +41,7 @@ public:
         : of(NULL)
     {}
 
-	void setOstream (std::ostream &);
+    void setOstream(std::ostream&);
     void receiveData(DataType);
     void end(DataType);
 };
@@ -65,9 +65,9 @@ inline void OstreamSaver<LowerLayer>::end(DataType n)
 }
 
 template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::setOstream (std::ostream & ostr)
+inline void OstreamSaver<LowerLayer>::setOstream(std::ostream& ostr)
 {
-	of = &ostr;
+    of = &ostr;
 }
 
 #endif
