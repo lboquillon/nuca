@@ -1,5 +1,5 @@
 /*
-comp.h: Nucleotides Compression Algorithms
+saver.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Daniel Gutson and Leonardo Boquillon, FuDePAN
 
     This file is part of Nuca.
