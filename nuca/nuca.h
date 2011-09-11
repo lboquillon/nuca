@@ -30,7 +30,8 @@ nuca.h: Nucleotides Compression Algorithms
 #include "ostream_saver.h"
 #include "bit_handle.h"
 #include "convert_type.h"
-#include "decompressing.h"
+#include "add_ns.h"
+#include "istream_loader.h"
 
 #endif
 

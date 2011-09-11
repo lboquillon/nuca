@@ -32,7 +32,7 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class RemoveNs : private Fsm, public LowerLayer
+class RemoveNs : public virtual Fsm, public LowerLayer
 {
 private:
 
@@ -191,7 +191,7 @@ inline void RemoveNs<LowerLayer>::end()
 template<class LowerLayer>
 inline void RemoveNs<LowerLayer>::flush(char c)
 {
-    // n1 + n2 % k = ((n1 % k) + (n2 % k)) % k
+    // (n1 + n2) % k = ((n1 % k) + (n2 % k)) % k
     sizeNuc = (sizeNuc + (oneCharSize % 4)) % 4;
     LowerLayer::receiveData(ConvertDataType<RemoveNs<LowerLayer>, LowerLayer>::convert(c));
 }

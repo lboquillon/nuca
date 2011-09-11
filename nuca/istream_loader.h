@@ -1,6 +1,6 @@
 /*
-ostream_saver.h: Nucleotides Compression Algorithms
-    Copyright (C) 2011 Daniel Gutson and Leonardo Boquillon, FuDePAN
+istream_loader.h: Nucleotides Compression Algorithms
+    Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
 
@@ -20,54 +20,49 @@ ostream_saver.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef OSTREAM_SAVER
-#define OSTREAM_SAVER
+#ifndef ISTREAM_LOADER
+#define ISTREAM_LOADER
 
-#include <fstream>
-#include <string>
 #include <iostream>
+#include <fstream>
 
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class OstreamSaver : public LowerLayer
+class IstreamLoader : public LowerLayer
 {
-    std::ostream* of;
+    std::istream* loader;
 public:
     typedef char DataType;
 
-    OstreamSaver()
-        : of(NULL)
-    {}
+    IstreamLoader()
+    { }
 
-    void setOstream(std::ostream&);
-    void receiveData(DataType);
-    void end(DataType);
+    void setIstream(std::istream&);
+    void run();
 };
 
 template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::receiveData(DataType buffer)
+void IstreamLoader<LowerLayer>::setIstream(std::istream& ist)
 {
-    for (size_t byte = 0; byte < sizeof(buffer); ++byte)
+    loader = &ist;
+}
+
+template<class LowerLayer>
+void IstreamLoader<LowerLayer>::run()
+{
+    DataType last;
+    DataType current;
+    loader->get(last);
+
+    while (loader->get(current))
     {
-        of->put(static_cast<char>(buffer & 0xff));
-        //cerr << std::hex << (buffer & 0xff) << endl;
-        buffer >>= 8;
+        LowerLayer::receiveData(ConvertDataType<IstreamLoader<LowerLayer>, LowerLayer>::convert(last));
+        last = current;
     }
-}
 
-template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::end(DataType n)
-{
-    receiveData(n);
-    //of->close(); close only for ofstream, what is going to do?
-}
-
-template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::setOstream(std::ostream& ostr)
-{
-    of = &ostr;
+    LowerLayer::end(last);
 }
 
 #endif

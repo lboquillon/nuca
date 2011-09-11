@@ -87,4 +87,64 @@ inline void CompressingBitHandle<LowerLayer>::end(DataType size)
     flush();
     LowerLayer::end(size);
 }
+
+//  ======================== Decompressing Bit Handle ==============================
+
+template<class UpperLayer, class LowerLayer>
+class ConvertDataType;
+
+template<class LowerLayer>
+class DecompressingBitHandle : public virtual Fsm, public LowerLayer
+{
+    typedef unsigned char Byte;
+    size_t current_bit;
+    Byte buffer;
+    static const Byte DataSize = 2;
+    std::queue<Byte> pending;
+
+    void flush();
+public:
+    typedef Byte DataType;
+
+    DecompressingBitHandle()
+    { }
+
+    void end(DataType);
+    void receiveData(DataType);
+};
+
+template<class LowerLayer>
+void DecompressingBitHandle<LowerLayer>::flush()
+{
+    buffer = pending.front();
+    pending.pop();
+
+    while (current_bit < 8)
+    {
+        LowerLayer::receiveData(ConvertDataType<DecompressingBitHandle<LowerLayer>, LowerLayer>::convert(valueToNuc(buffer & 0x3)));
+        buffer >>= DataSize;
+        current_bit += DataSize;
+    }
+}
+
+template<class LowerLayer>
+void DecompressingBitHandle<LowerLayer>::receiveData(DataType data)
+{
+    if (!pending.empty())
+    {
+        current_bit = 0;
+        flush();
+    }
+
+    pending.push(data);
+}
+
+template<class LowerLayer>
+void DecompressingBitHandle<LowerLayer>::end(DataType size)
+{
+    current_bit = 8 - (size << 1);
+    flush();
+    LowerLayer::end();
+}
+
 #endif
