@@ -28,16 +28,19 @@ convert_type.h: Nucleotides Compression Algorithms
 #include "bit_handle.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
+#include "add_ns.h"
+#include "istream_loader.h"
+
 #include <biopp/bio_molecular/bio_molecular.h>
 
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
-template<>
-class ConvertDataType<StringTestLayer<CompressingBitHandle<OstreamSaver<EndLayer> > >, CompressingBitHandle<OstreamSaver<EndLayer> > >
+template<class LowerType>
+class ConvertDataType<StringTestLayer<CompressingBitHandle<LowerType> >, CompressingBitHandle<LowerType> >
 {
 private:
-    typedef CompressingBitHandle<OstreamSaver<EndLayer> > Lower;
+    typedef CompressingBitHandle<LowerType> Lower;
 public:
     static typename Lower::DataType convert(typename CompressingBitHandle<Lower>::DataType data)
     {
@@ -45,23 +48,23 @@ public:
     }
 };
 
-template<>
-class ConvertDataType<RemoveNs<StringTestLayer<CompressingBitHandle<OstreamSaver<EndLayer> > > >, StringTestLayer<CompressingBitHandle<OstreamSaver<EndLayer> > > >
+template<class LowerType>
+class ConvertDataType<RemoveNs<StringTestLayer<LowerType> >, StringTestLayer<LowerType> >
 {
 private:
-    typedef StringTestLayer<CompressingBitHandle<OstreamSaver<EndLayer> > > Lower;
+    typedef StringTestLayer<LowerType> Lower;
 public:
-    static typename Lower::DataType convert(typename CompressingBitHandle<Lower>::DataType data)
+    static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
     {
         return typename Lower::DataType(data);
     }
 };
 
-template<>
-class ConvertDataType<RemoveNs<CompressingBitHandle<OstreamSaver<EndLayer> > >, CompressingBitHandle< OstreamSaver<EndLayer> > >
+template<class LowerType>
+class ConvertDataType<RemoveNs<CompressingBitHandle<LowerType> >, CompressingBitHandle<LowerType> >
 {
 private:
-    typedef CompressingBitHandle< OstreamSaver<EndLayer> > Lower;
+    typedef CompressingBitHandle<LowerType> Lower;
 
 public:
     static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
@@ -70,13 +73,71 @@ public:
     }
 };
 
-template<>
-class ConvertDataType<CompressingBitHandle<OstreamSaver<EndLayer> >, OstreamSaver<EndLayer> >
+template<class LowerType>
+class ConvertDataType<CompressingBitHandle<OstreamSaver<LowerType> >, OstreamSaver<LowerType> >
 {
 private:
     typedef OstreamSaver<EndLayer> Lower;
 public:
     static typename Lower::DataType convert(typename CompressingBitHandle<Lower>::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+template<class LowerType>
+class ConvertDataType<AddNs<StringTestLayer<LowerType> >, StringTestLayer<LowerType> >
+{
+private:
+    typedef StringTestLayer<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename AddNs<Lower>::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+template<class LowerType>
+class ConvertDataType<DecompressingBitHandle<AddNs<LowerType> >, AddNs<LowerType> >
+{
+private:
+    typedef AddNs<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename DecompressingBitHandle<Lower>::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+template<class LowerType>
+class ConvertDataType<CompressingBitHandle<DecompressingBitHandle<LowerType> >, DecompressingBitHandle<LowerType> >
+{
+private:
+    typedef DecompressingBitHandle<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename CompressingBitHandle<DecompressingBitHandle<Lower> >::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+template<>
+class ConvertDataType<StringTestLayer<EndLayer>, EndLayer>
+{
+public:
+    static char convert(typename StringTestLayer<EndLayer>::DataType data)
+    {
+        return char(data);
+    }
+};
+
+template<class LowerType>
+class ConvertDataType<IstreamLoader<DecompressingBitHandle<LowerType> >, DecompressingBitHandle<LowerType>  >
+{
+private:
+    typedef DecompressingBitHandle<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename IstreamLoader<DecompressingBitHandle<Lower> >::DataType data)
     {
         return typename Lower::DataType(data);
     }

@@ -36,11 +36,6 @@ class Fsm
 protected:
     const std::string rareSeq;
 
-    /*void addMissingNuc(size_t n)
-    {
-        outSeq += rareSeq.substr(0, n);
-    }*/
-
     static char valueToNuc(size_t value)
     {
         static const char nuc[] = "ATCG";
