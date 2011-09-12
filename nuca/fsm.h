@@ -30,55 +30,21 @@ enum EndSeqStimulus
     EndSeq
 };
 
-class Fsm
+struct RareSequence
 {
-
-protected:
-    const std::string rareSeq;
-
-    static char valueToNuc(size_t value)
-    {
-        static const char nuc[] = "ATCG";
-
-        if (value >= sizeof(nuc) / sizeof(nuc[0]))
-            throw "Invalid value";
-
-        return nuc[value];
-    }
-
-    static size_t nucToValue(char n)
-    {
-        char val;
-
-        switch (n)
-        {
-            case 'A':
-                val = 0;
-                break;
-
-            case 'T':
-                val = 1;
-                break;
-
-            case 'C':
-                val = 2;
-                break;
-
-            case 'G':
-                val = 3;
-                break;
-
-            default:
-                throw "Invalid Nuc";
-        }
-
-        return val;
-    }
-
-    Fsm()
-        : rareSeq("ACTG")
-    {
-    }
+    static const std::string rareSeq;
 };
+
+const std::string RareSequence::rareSeq = "ACTG";
+
+inline char valueToNuc(size_t value)
+{
+    static const char nuc[] = "ATCG";
+
+    if (value >= sizeof(nuc) / sizeof(nuc[0]))
+        throw "Invalid value";
+
+    return nuc[value];
+}
 
 #endif

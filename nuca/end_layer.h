@@ -26,9 +26,9 @@ end_layer.h: Nucleotides Compression Algorithms
 class EndLayer
 {
 public:
-    void receiveData(char c) { }
+    void receiveData(char) { }
     void receiveData() { }
-    void end(char c) { }
+    void end(char) { }
     void end() { }
 };
 

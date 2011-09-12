@@ -94,7 +94,7 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class DecompressingBitHandler : public virtual Fsm, public LowerLayer
+class DecompressingBitHandler : public LowerLayer
 {
     typedef unsigned char Byte;
     size_t current_bit;

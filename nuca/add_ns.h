@@ -26,11 +26,13 @@ add_ns.h: Nucleotides Compression Algorithms
 #include <stack>
 #include "fsm.h"
 
+#include <biopp/bio_molecular/bio_molecular.h>
+
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class AddNs : public virtual Fsm, public LowerLayer
+class AddNs : public LowerLayer
 {
 private:
     class State
@@ -111,8 +113,7 @@ private:
 
 public:
     AddNs()
-        : Fsm(),
-          stateNuc(new StateNuc(this)),
+        : stateNuc(new StateNuc(this)),
           stateReadingEscapeChar(new StateReadingEscapeSequence(this)),
           stateReadBit(new StateReadingNCount(this)),
           current(stateNuc),
@@ -138,8 +139,8 @@ inline void AddNs<LowerLayer>::addNs()
 {
     if (0 == nCounter)
     {
-        for (size_t i = 0; i < rareSeq.size(); ++i)
-            flush(rareSeq[i]);
+        for (size_t i = 0; i < RareSequence::rareSeq.size(); ++i)
+            flush(RareSequence::rareSeq[i]);
     }
     else
     {
@@ -158,7 +159,7 @@ template<class LowerLayer>
 inline void AddNs<LowerLayer>::addMissingNuc(size_t n)
 {
     for (size_t i = 0; i < n; ++i)
-        flush(rareSeq[i]);
+        flush(RareSequence::rareSeq[i]);
 }
 
 template<class LowerLayer>
@@ -195,7 +196,7 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateNuc::sti
 {
     const State* state;
 
-    if (n == this->fsm->rareSeq[0])
+    if (n == RareSequence::rareSeq[0])
     {
         this->fsm->genericCounter = 1;
         state = this->fsm->stateReadingEscapeChar;
@@ -220,9 +221,9 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingE
 {
     const State* state;
 
-    if (n == this->fsm->rareSeq[this->fsm->genericCounter])
+    if (n == RareSequence::rareSeq[this->fsm->genericCounter])
     {
-        if (this->fsm->genericCounter < this->fsm->rareSeq.size() - 1)
+        if (this->fsm->genericCounter < RareSequence::rareSeq.size() - 1)
         {
             this->fsm->genericCounter++;
             state = this;
@@ -237,7 +238,7 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingE
     {
         this->fsm->addMissingNuc(this->fsm->genericCounter);
 
-        if (n == this->fsm->rareSeq[0])
+        if (n == RareSequence::rareSeq[0])
         {
             this->fsm->stiStack.push(this->fsm->stateNuc);
         }
@@ -266,7 +267,7 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingN
 {
     const State* state;
 
-    this->fsm->nCounter = (this->fsm->nCounter << 2) | this->fsm->nucToValue(n);
+    this->fsm->nCounter = (this->fsm->nCounter << 2) | to_nuc(n);
 
     if (this->fsm->genericCounter < 4)
     {
