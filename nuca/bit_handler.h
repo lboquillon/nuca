@@ -20,8 +20,8 @@ bit_handle.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef BIT_HANDLE
-#define BIT_HANDLE
+#ifndef BIT_HANDLER_H
+#define BIT_HANDLER_H
 
 #include <iostream>
 #include <biopp/bio_molecular/bio_molecular.h>
@@ -32,7 +32,7 @@ class ConvertDataType;
 using namespace std;
 
 template<class LowerLayer>
-class CompressingBitHandle : public LowerLayer
+class CompressingBitHandler : public LowerLayer
 {
     size_t free_bits;
     unsigned char buffer;
@@ -44,13 +44,13 @@ class CompressingBitHandle : public LowerLayer
 public:
     typedef unsigned char DataType;
 
-    CompressingBitHandle()
+    CompressingBitHandler()
         : free_bits(TotalFreeBits),
           buffer(0)
     {
     }
 
-    ~CompressingBitHandle()
+    ~CompressingBitHandler()
     {
         flush();
     }
@@ -61,18 +61,18 @@ public:
 
 
 template<class LowerLayer>
-inline void CompressingBitHandle<LowerLayer>::flush()
+inline void CompressingBitHandler<LowerLayer>::flush()
 {
     if (free_bits < TotalFreeBits)
     {
-        LowerLayer::receiveData(ConvertDataType<CompressingBitHandle<LowerLayer>, LowerLayer>::convert(buffer));
+        LowerLayer::receiveData(ConvertDataType<CompressingBitHandler<LowerLayer>, LowerLayer>::convert(buffer));
         free_bits = TotalFreeBits;
     }
     buffer = 0;
 }
 
 template<class LowerLayer>
-inline void CompressingBitHandle<LowerLayer>::receiveData(DataType data)
+inline void CompressingBitHandler<LowerLayer>::receiveData(DataType data)
 {
     if (free_bits < DataSize)
         flush();
@@ -82,7 +82,7 @@ inline void CompressingBitHandle<LowerLayer>::receiveData(DataType data)
 }
 
 template<class LowerLayer>
-inline void CompressingBitHandle<LowerLayer>::end(DataType size)
+inline void CompressingBitHandler<LowerLayer>::end(DataType size)
 {
     flush();
     LowerLayer::end(size);
@@ -94,7 +94,7 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class DecompressingBitHandle : public virtual Fsm, public LowerLayer
+class DecompressingBitHandler : public virtual Fsm, public LowerLayer
 {
     typedef unsigned char Byte;
     size_t current_bit;
@@ -106,7 +106,7 @@ class DecompressingBitHandle : public virtual Fsm, public LowerLayer
 public:
     typedef Byte DataType;
 
-    DecompressingBitHandle()
+    DecompressingBitHandler()
     { }
 
     void end(DataType);
@@ -114,21 +114,21 @@ public:
 };
 
 template<class LowerLayer>
-void DecompressingBitHandle<LowerLayer>::flush()
+void DecompressingBitHandler<LowerLayer>::flush()
 {
     buffer = pending.front();
     pending.pop();
 
     while (current_bit < 8)
     {
-        LowerLayer::receiveData(ConvertDataType<DecompressingBitHandle<LowerLayer>, LowerLayer>::convert(valueToNuc(buffer & 0x3)));
+        LowerLayer::receiveData(ConvertDataType<DecompressingBitHandler<LowerLayer>, LowerLayer>::convert(valueToNuc(buffer & 0x3)));
         buffer >>= DataSize;
         current_bit += DataSize;
     }
 }
 
 template<class LowerLayer>
-void DecompressingBitHandle<LowerLayer>::receiveData(DataType data)
+void DecompressingBitHandler<LowerLayer>::receiveData(DataType data)
 {
     if (!pending.empty())
     {
@@ -140,7 +140,7 @@ void DecompressingBitHandle<LowerLayer>::receiveData(DataType data)
 }
 
 template<class LowerLayer>
-void DecompressingBitHandle<LowerLayer>::end(DataType size)
+void DecompressingBitHandler<LowerLayer>::end(DataType size)
 {
     current_bit = 8 - (size << 1);
     flush();

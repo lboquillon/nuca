@@ -25,7 +25,7 @@ convert_type.h: Nucleotides Compression Algorithms
 
 #include "end_layer.h"
 #include "ostream_saver.h"
-#include "bit_handle.h"
+#include "bit_handler.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
 #include "add_ns.h"
@@ -37,12 +37,12 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerType>
-class ConvertDataType<StringTestLayer<CompressingBitHandle<LowerType> >, CompressingBitHandle<LowerType> >
+class ConvertDataType<StringTestLayer<CompressingBitHandler<LowerType> >, CompressingBitHandler<LowerType> >
 {
 private:
-    typedef CompressingBitHandle<LowerType> Lower;
+    typedef CompressingBitHandler<LowerType> Lower;
 public:
-    static typename Lower::DataType convert(typename CompressingBitHandle<Lower>::DataType data)
+    static typename Lower::DataType convert(typename CompressingBitHandler<Lower>::DataType data)
     {
         return typename Lower::DataType(to_nuc(data));
     }
@@ -61,10 +61,10 @@ public:
 };
 
 template<class LowerType>
-class ConvertDataType<RemoveNs<CompressingBitHandle<LowerType> >, CompressingBitHandle<LowerType> >
+class ConvertDataType<RemoveNs<CompressingBitHandler<LowerType> >, CompressingBitHandler<LowerType> >
 {
 private:
-    typedef CompressingBitHandle<LowerType> Lower;
+    typedef CompressingBitHandler<LowerType> Lower;
 
 public:
     static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
@@ -74,12 +74,12 @@ public:
 };
 
 template<class LowerType>
-class ConvertDataType<CompressingBitHandle<OstreamSaver<LowerType> >, OstreamSaver<LowerType> >
+class ConvertDataType<CompressingBitHandler<OstreamSaver<LowerType> >, OstreamSaver<LowerType> >
 {
 private:
     typedef OstreamSaver<EndLayer> Lower;
 public:
-    static typename Lower::DataType convert(typename CompressingBitHandle<Lower>::DataType data)
+    static typename Lower::DataType convert(typename CompressingBitHandler<Lower>::DataType data)
     {
         return typename Lower::DataType(data);
     }
@@ -98,24 +98,24 @@ public:
 };
 
 template<class LowerType>
-class ConvertDataType<DecompressingBitHandle<AddNs<LowerType> >, AddNs<LowerType> >
+class ConvertDataType<DecompressingBitHandler<AddNs<LowerType> >, AddNs<LowerType> >
 {
 private:
     typedef AddNs<LowerType> Lower;
 public:
-    static typename Lower::DataType convert(typename DecompressingBitHandle<Lower>::DataType data)
+    static typename Lower::DataType convert(typename DecompressingBitHandler<Lower>::DataType data)
     {
         return typename Lower::DataType(data);
     }
 };
 
 template<class LowerType>
-class ConvertDataType<CompressingBitHandle<DecompressingBitHandle<LowerType> >, DecompressingBitHandle<LowerType> >
+class ConvertDataType<CompressingBitHandler<DecompressingBitHandler<LowerType> >, DecompressingBitHandler<LowerType> >
 {
 private:
-    typedef DecompressingBitHandle<LowerType> Lower;
+    typedef DecompressingBitHandler<LowerType> Lower;
 public:
-    static typename Lower::DataType convert(typename CompressingBitHandle<DecompressingBitHandle<Lower> >::DataType data)
+    static typename Lower::DataType convert(typename CompressingBitHandler<DecompressingBitHandler<Lower> >::DataType data)
     {
         return typename Lower::DataType(data);
     }
@@ -132,12 +132,12 @@ public:
 };
 
 template<class LowerType>
-class ConvertDataType<IstreamLoader<DecompressingBitHandle<LowerType> >, DecompressingBitHandle<LowerType>  >
+class ConvertDataType<IstreamLoader<DecompressingBitHandler<LowerType> >, DecompressingBitHandler<LowerType>  >
 {
 private:
-    typedef DecompressingBitHandle<LowerType> Lower;
+    typedef DecompressingBitHandler<LowerType> Lower;
 public:
-    static typename Lower::DataType convert(typename IstreamLoader<DecompressingBitHandle<Lower> >::DataType data)
+    static typename Lower::DataType convert(typename IstreamLoader<DecompressingBitHandler<Lower> >::DataType data)
     {
         return typename Lower::DataType(data);
     }
