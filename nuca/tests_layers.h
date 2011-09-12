@@ -20,8 +20,8 @@ tests_layers.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef TEST_LAYERS
-#define TEST_LAYERS
+#ifndef TEST_LAYERS_H
+#define TEST_LAYERS_H
 
 #include <iostream>
 

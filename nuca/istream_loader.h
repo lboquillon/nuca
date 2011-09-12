@@ -20,8 +20,8 @@ istream_loader.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef ISTREAM_LOADER
-#define ISTREAM_LOADER
+#ifndef ISTREAM_LOADER_H
+#define ISTREAM_LOADER_H
 
 #include <iostream>
 #include <fstream>

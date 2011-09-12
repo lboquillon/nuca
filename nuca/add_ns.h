@@ -20,8 +20,8 @@ add_ns.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef ADD_NS
-#define ADD_NS
+#ifndef ADD_NS_H
+#define ADD_NS_H
 
 #include <stack>
 #include "fsm.h"
