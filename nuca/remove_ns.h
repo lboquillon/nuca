@@ -32,7 +32,7 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class RemoveNs : public virtual Fsm, public LowerLayer
+class RemoveNs : public LowerLayer
 {
 private:
 
@@ -105,8 +105,7 @@ public:
     typedef char DataType;
 
     RemoveNs()
-        : Fsm(),
-          stateNotN(new StateNotN(this)),
+        : stateNotN(new StateNotN(this)),
           stateN(new StateN(this)),
           stateReadingSequence(new StateReadingSequence(this)),
           current(stateNotN),
@@ -132,14 +131,14 @@ template<class LowerLayer>
 inline void RemoveNs<LowerLayer>::addMissingNuc(size_t n)
 {
     for (size_t i = 0; i < n; ++i)
-        flush(rareSeq[i]);
+        flush(RareSequence::rareSeq[i]);
 }
 
 template<class LowerLayer>
 inline void RemoveNs<LowerLayer>::makeEscapeSequence()
 {
-    for (size_t i = 0; i < rareSeq.size(); ++i)
-        flush(rareSeq[i]);
+    for (size_t i = 0; i < RareSequence::rareSeq.size(); ++i)
+        flush(RareSequence::rareSeq[i]);
 
     char numb[5] = { '\0'};
 
@@ -201,7 +200,7 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateNo
 {
     const State* state;
 
-    if (c == this->fsm->rareSeq[0])
+    if (c == RareSequence::rareSeq[0])
     {
         this->fsm->ns = 0;
         this->fsm->stimuliOrder = 1;
@@ -235,7 +234,7 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN:
     const State* state;
     bool isNotSeqChar;
 
-    if (c == this->fsm->rareSeq[0])
+    if (c == RareSequence::rareSeq[0])
     {
         this->fsm->stiStack.push(this->fsm->stateNotN);
         isNotSeqChar = false;
@@ -284,9 +283,9 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateRe
 {
     const State* state;
 
-    if (c == this->fsm->rareSeq[this->fsm->stimuliOrder])
+    if (c == RareSequence::rareSeq[this->fsm->stimuliOrder])
     {
-        if (this->fsm->stimuliOrder < this->fsm->rareSeq.size() - 1)
+        if (this->fsm->stimuliOrder < RareSequence::rareSeq.size() - 1)
         {
             this->fsm->stimuliOrder++;
             state = this;
@@ -302,7 +301,7 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateRe
     {
         this->fsm->addMissingNuc(this->fsm->stimuliOrder);
 
-        if (c == this->fsm->rareSeq[0])
+        if (c == RareSequence::rareSeq[0])
         {
             this->fsm->stimuliOrder = 0;
             this->fsm->stiStack.push(this->fsm->stateNotN);
