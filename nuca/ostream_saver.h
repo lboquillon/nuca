@@ -20,8 +20,8 @@ ostream_saver.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef OSTREAM_SAVER
-#define OSTREAM_SAVER
+#ifndef OSTREAM_SAVER_H
+#define OSTREAM_SAVER_H
 
 #include <fstream>
 #include <string>

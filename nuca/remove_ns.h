@@ -20,8 +20,8 @@ remove_ns.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef REMOVE_NS
-#define REMOVE_NS
+#ifndef REMOVE_NS_H
+#define REMOVE_NS_H
 
 #include <stack>
 #include "fsm.h"

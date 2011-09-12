@@ -20,16 +20,14 @@ end_layer.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef END_LAYER
-#define END_LAYER
+#ifndef END_LAYER_H
+#define END_LAYER_H
 
 class EndLayer
 {
 public:
     void receiveData(char) { }
-    void receiveData() { }
     void end(char) { }
-    void end() { }
 };
 
 #endif

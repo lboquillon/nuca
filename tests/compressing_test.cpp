@@ -78,4 +78,3 @@ TEST(Compressing, compressingNs3)
     of.close();
     ASSERT_EQ(out, "ACACTGAAATACTGAAAAG");
 }
-

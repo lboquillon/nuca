@@ -20,8 +20,8 @@ convert_type.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef CONVERT_TYPE
-#define CONVERT_TYPE
+#ifndef CONVERT_TYPE_H
+#define CONVERT_TYPE_H
 
 #include "end_layer.h"
 #include "ostream_saver.h"
