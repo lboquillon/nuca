@@ -25,13 +25,14 @@ remove_ns.h: Nucleotides Compression Algorithms
 
 #include <stack>
 #include "fsm.h"
+#include "nuc_mapper.h"
 
 using namespace std;
 
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
-template<class LowerLayer>
+template<class LowerLayer, size_t nucsNumber = 4>
 class RemoveNs : public LowerLayer
 {
 private:
@@ -39,9 +40,9 @@ private:
     class State
     {
     protected:
-        RemoveNs<LowerLayer>* const fsm;
+        RemoveNs<LowerLayer, nucsNumber>* const fsm;
     public:
-        State(RemoveNs<LowerLayer>* m) : fsm(m)
+        State(RemoveNs<LowerLayer, nucsNumber>* m) : fsm(m)
         {
         }
         virtual const State* stimulusNotN(char) const = 0;
@@ -57,7 +58,7 @@ private:
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
     public:
-        StateNotN(RemoveNs<LowerLayer>* m) : State(m)
+        StateNotN(RemoveNs<LowerLayer, nucsNumber>* m) : State(m)
         {
         }
     };
@@ -69,7 +70,7 @@ private:
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
     public:
-        StateN(RemoveNs<LowerLayer>* m) : State(m)
+        StateN(RemoveNs<LowerLayer, nucsNumber>* m) : State(m)
         {
         }
     };
@@ -81,7 +82,7 @@ private:
         const State* stimulusN() const;
         const State* stimulusEndSeq() const;
     public:
-        StateReadingSequence(RemoveNs<LowerLayer>* m) : State(m)
+        StateReadingSequence(RemoveNs<LowerLayer, nucsNumber>* m) : State(m)
         {
         }
     };
@@ -97,6 +98,7 @@ private:
     std::stack<const State*> stiStack;
     char sizeNuc;
     static const size_t oneCharSize = 1;
+    static const size_t bitPerNuc = 2;
 
     void addMissingNuc(size_t);
     void makeEscapeSequence();
@@ -127,33 +129,33 @@ public:
     void end();
 };
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::addMissingNuc(size_t n)
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::addMissingNuc(size_t n)
 {
     for (size_t i = 0; i < n; ++i)
         flush(nuca::rareSeq[i]);
 }
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::makeEscapeSequence()
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::makeEscapeSequence()
 {
     for (size_t i = 0; i < nuca::rareSeq.size(); ++i)
         flush(nuca::rareSeq[i]);
 
-    char numb[5] = { '\0'};
+    char numb[nucsNumber] = { '\0'};
 
-    for (int i = 3; i >= 0; i--)
+    for (int i = nucsNumber - 1; i >= 0; i--)
     {
         numb[i] = nuca::valueToNuc(ns & 3);
-        ns >>= 2;
+        ns >>= bitPerNuc;
     }
 
-    for (size_t i = 0; i < 4; ++i)
+    for (size_t i = 0; i < nucsNumber; ++i)
         flush(numb[i]);
 }
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::receiveData(DataType sti)
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::receiveData(DataType sti)
 {
     if (current == NULL)
         throw "Invalid State";
@@ -174,29 +176,29 @@ inline void RemoveNs<LowerLayer>::receiveData(DataType sti)
     }
 }
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::receiveData(nuca::EndSeqStimulus)
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::receiveData(nuca::EndSeqStimulus)
 {
     current->stimulusEndSeq();
     end();
 }
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::end()
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::end()
 {
     LowerLayer::end(sizeNuc == 0 ? 4 : sizeNuc);
 }
 
-template<class LowerLayer>
-inline void RemoveNs<LowerLayer>::flush(char c)
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::flush(char c)
 {
     // (n1 + n2) % k = ((n1 % k) + (n2 % k)) % k
-    sizeNuc = (sizeNuc + (oneCharSize % 4)) % 4;
-    LowerLayer::receiveData(ConvertDataType<RemoveNs<LowerLayer>, LowerLayer>::convert(c));
+    sizeNuc = (sizeNuc + (oneCharSize % nucsNumber)) % nucsNumber;
+    LowerLayer::receiveData(ConvertDataType<RemoveNs<LowerLayer, nucsNumber>, LowerLayer>::convert(c));
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateNotN::stimulusNotN(char c) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateNotN::stimulusNotN(char c) const
 {
     const State* state;
 
@@ -215,21 +217,21 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateNo
     return state;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateNotN::stimulusN() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateNotN::stimulusN() const
 {
     this->fsm->ns = 1;
     return this->fsm->stateN;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateNotN::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateNotN::stimulusEndSeq() const
 {
     return NULL;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN::stimulusNotN(char c) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateN::stimulusNotN(char c) const
 {
     const State* state;
     bool isNotSeqChar;
@@ -255,10 +257,10 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN:
 }
 
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN::stimulusN() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateN::stimulusN() const
 {
-    if (this->fsm->ns < 255)
+    if (this->fsm->ns < nuca::NucMapper<nucsNumber>::max)
     {
         this->fsm->ns++;
     }
@@ -271,15 +273,15 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN:
     return this;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateN::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateN::stimulusEndSeq() const
 {
     this->fsm->makeEscapeSequence();
     return NULL;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateReadingSequence::stimulusNotN(char c) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateReadingSequence::stimulusNotN(char c) const
 {
     const State* state;
 
@@ -316,8 +318,8 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateRe
     return state;
 }
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateReadingSequence::stimulusN() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateReadingSequence::stimulusN() const
 {
     this->fsm->addMissingNuc(this->fsm->stimuliOrder);
     this->fsm->stimuliOrder = 0;
@@ -326,8 +328,8 @@ inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateRe
 }
 
 
-template<class LowerLayer>
-inline const typename RemoveNs<LowerLayer>::State* RemoveNs<LowerLayer>::StateReadingSequence::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLayer, nucsNumber>::StateReadingSequence::stimulusEndSeq() const
 {
     this->fsm->addMissingNuc(this->fsm->stimuliOrder);
     this->fsm->stimuliOrder = 0;

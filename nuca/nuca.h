@@ -24,6 +24,7 @@ nuca.h: Nucleotides Compression Algorithms
 #define NUCA_H
 
 #include <string>
+#include "nuc_mapper.h"
 #include "end_layer.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
