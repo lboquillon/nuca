@@ -40,10 +40,10 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType
 {
 public:
-	static typename LowerLayer::DataType convert (typename UpperLayer::DataType data)
-	{
-			return typename LowerLayer::DataType (data);
-	}
+    static typename LowerLayer::DataType convert(typename UpperLayer::DataType data)
+    {
+        return typename LowerLayer::DataType(data);
+    }
 };
 
 template<class UpperLayer, class LowerLayer>
