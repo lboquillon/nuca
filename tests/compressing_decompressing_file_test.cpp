@@ -44,7 +44,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile1)
     std::ifstream is("file.out", std::ios_base::binary);
     TestDecompressor decompressor;
     decompressor.setIstream(is);
-    decompressor.setString(out);
+    decompressor.setOutputString(out);
     decompressor.run();
 
     is.close();
@@ -70,7 +70,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile2)
     std::ifstream is("file.out", std::ios_base::binary);
     TestDecompressor decompressor;
     decompressor.setIstream(is);
-    decompressor.setString(out);
+    decompressor.setOutputString(out);
     decompressor.run();
 
     is.close();
@@ -96,7 +96,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile3)
     std::ifstream is("file.out", std::ios_base::binary);
     TestDecompressor decompressor;
     decompressor.setIstream(is);
-    decompressor.setString(out);
+    decompressor.setOutputString(out);
     decompressor.run();
 
     is.close();
