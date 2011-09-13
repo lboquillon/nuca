@@ -25,68 +25,24 @@ fsm.h: Nucleotides Compression Algorithms
 
 #include <string>
 
+namespace nuca
+{
 enum EndSeqStimulus
 {
     EndSeq
 };
 
-class Fsm
+static const std::string rareSeq = "ACTG";
+
+inline char valueToNuc(size_t value)
 {
+    static const char nuc[] = "ATCG";
 
-protected:
-    const std::string rareSeq;
-    std::string& outSeq;
+    if (value >= sizeof(nuc) / sizeof(nuc[0]))
+        throw "Invalid value";
 
-    void addMissingNuc(size_t n)
-    {
-        outSeq += rareSeq.substr(0, n);
-    }
-
-    static char valueToNuc(size_t value)
-    {
-        static const char nuc[] = "ATCG";
-
-        if (value >= sizeof(nuc) / sizeof(nuc[0]))
-            throw "Invalid value";
-
-        return nuc[value];
-    }
-
-    static size_t nucToValue(char n)
-    {
-        char val;
-
-        switch (n)
-        {
-            case 'A':
-                val = 0;
-                break;
-
-            case 'T':
-                val = 1;
-                break;
-
-            case 'C':
-                val = 2;
-                break;
-
-            case 'G':
-                val = 3;
-                break;
-
-            default:
-                throw "Invalid Nuc";
-        }
-
-        return val;
-    }
-
-    Fsm(std::string& out)
-        : rareSeq("ACT"),
-          outSeq(out)
-    {
-        outSeq.clear();
-    }
-};
+    return nuc[value];
+}
+}
 
 #endif

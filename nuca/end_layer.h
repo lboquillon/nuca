@@ -1,5 +1,5 @@
 /*
-nuca.h: Nucleotides Compression Algorithms
+end_layer.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
@@ -20,18 +20,16 @@ nuca.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef NUCA_H
-#define NUCA_H
+#ifndef END_LAYER_H
+#define END_LAYER_H
 
-#include <string>
-#include "end_layer.h"
-#include "tests_layers.h"
-#include "remove_ns.h"
-#include "ostream_saver.h"
-#include "bit_handler.h"
-#include "convert_type.h"
-#include "add_ns.h"
-#include "istream_loader.h"
+class EndLayer
+{
+public:
+    typedef char DataType;
+
+    void receiveData(char) { }
+    void end(char) { }
+};
 
 #endif
-
