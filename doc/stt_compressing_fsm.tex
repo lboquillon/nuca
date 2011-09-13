@@ -1,0 +1,19 @@
+\documentclass[12pt]{article}
+
+\title {State transition table}
+
+\begin{document}
+	\begin{center}
+		{\large \textbf{\textsc{State transition table}}}\\\vspace{12mm}
+
+		\begin{tabular}{ | l | l | l | l | l | l | l |}
+			\hline
+    			& N & !N & N $>$ 255 & seqEnd & rareSeqChar & stiOr $=$ len(rareSeq)-1 \\ \hline
+			N & N & not N & N & exit & rareSeqChar & error	 		       \\ \hline
+			not N & N & not N & error & exit & rareSeqChar & error		       \\ \hline
+			rareSeqChar & N & not N & error & exit & rareSeqChar & !N	       \\ \hline
+			exit  & error & error & error & error & error & error		       \\ \hline
+				
+		\end{tabular}
+	\end{center}
+\end{document}
