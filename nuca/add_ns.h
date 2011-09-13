@@ -104,7 +104,7 @@ private:
     const State* const stateReadBit;
     const State* current;
     size_t genericCounter;
-    size_t nCounter;
+    unsigned char nCounter;
     std::stack<const State*> stiStack;
 
     void addNs();
@@ -131,7 +131,7 @@ public:
 
     void receiveData(char);
     void receiveData(nuca::EndSeqStimulus);
-    void end();
+    void end(char);
 };
 
 template<class LowerLayer>
@@ -178,7 +178,7 @@ inline void AddNs<LowerLayer>::receiveData(char sti)
 }
 
 template<class LowerLayer>
-inline void AddNs<LowerLayer>::end()
+inline void AddNs<LowerLayer>::end(char)
 {
     current->stimulusEndSeq();
 
