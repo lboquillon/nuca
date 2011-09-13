@@ -37,7 +37,7 @@ TEST(Compressing, compressingNs1)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
 
     ASSERT_EQ(out, "ACTGAAAAACTGGGGGACTGGGGGACTGGGGGACG");
@@ -55,7 +55,7 @@ TEST(Compressing, compressingNs2)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
 
     ASSERT_EQ(out, "ACACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGACTGGGGGAACGTG");
@@ -74,7 +74,7 @@ TEST(Compressing, compressingNs3)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
     ASSERT_EQ(out, "ACACTGAAATACTGAAAAG");
 }

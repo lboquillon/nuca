@@ -121,7 +121,7 @@ void DecompressingBitHandler<LowerLayer>::flush()
 
     while (current_bit < 8)
     {
-        LowerLayer::receiveData(ConvertDataType<DecompressingBitHandler<LowerLayer>, LowerLayer>::convert(valueToNuc(buffer & 0x3)));
+        LowerLayer::receiveData(ConvertDataType<DecompressingBitHandler<LowerLayer>, LowerLayer>::convert(nuca::valueToNuc(buffer & 0x3)));
         buffer >>= DataSize;
         current_bit += DataSize;
     }

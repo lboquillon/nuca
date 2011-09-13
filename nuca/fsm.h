@@ -25,17 +25,14 @@ fsm.h: Nucleotides Compression Algorithms
 
 #include <string>
 
+namespace nuca
+{
 enum EndSeqStimulus
 {
     EndSeq
 };
 
-struct RareSequence
-{
-    static const std::string rareSeq;
-};
-
-const std::string RareSequence::rareSeq = "ACTG";
+static const std::string rareSeq = "ACTG";
 
 inline char valueToNuc(size_t value)
 {
@@ -45,6 +42,7 @@ inline char valueToNuc(size_t value)
         throw "Invalid value";
 
     return nuc[value];
+}
 }
 
 #endif

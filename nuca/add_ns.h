@@ -130,7 +130,7 @@ public:
     }
 
     void receiveData(char);
-    void receiveData(EndSeqStimulus);
+    void receiveData(nuca::EndSeqStimulus);
     void end();
 };
 
@@ -139,8 +139,8 @@ inline void AddNs<LowerLayer>::addNs()
 {
     if (0 == nCounter)
     {
-        for (size_t i = 0; i < RareSequence::rareSeq.size(); ++i)
-            flush(RareSequence::rareSeq[i]);
+        for (size_t i = 0; i < nuca::rareSeq.size(); ++i)
+            flush(nuca::rareSeq[i]);
     }
     else
     {
@@ -159,7 +159,7 @@ template<class LowerLayer>
 inline void AddNs<LowerLayer>::addMissingNuc(size_t n)
 {
     for (size_t i = 0; i < n; ++i)
-        flush(RareSequence::rareSeq[i]);
+        flush(nuca::rareSeq[i]);
 }
 
 template<class LowerLayer>
@@ -185,7 +185,7 @@ inline void AddNs<LowerLayer>::end()
 }
 
 template<class LowerLayer>
-inline void AddNs<LowerLayer>::receiveData(EndSeqStimulus)
+inline void AddNs<LowerLayer>::receiveData(nuca::EndSeqStimulus)
 {
     current->stimulusEndSeq();
 
@@ -196,7 +196,7 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateNuc::sti
 {
     const State* state;
 
-    if (n == RareSequence::rareSeq[0])
+    if (n == nuca::rareSeq[0])
     {
         this->fsm->genericCounter = 1;
         state = this->fsm->stateReadingEscapeChar;
@@ -221,9 +221,9 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingE
 {
     const State* state;
 
-    if (n == RareSequence::rareSeq[this->fsm->genericCounter])
+    if (n == nuca::rareSeq[this->fsm->genericCounter])
     {
-        if (this->fsm->genericCounter < RareSequence::rareSeq.size() - 1)
+        if (this->fsm->genericCounter < nuca::rareSeq.size() - 1)
         {
             this->fsm->genericCounter++;
             state = this;
@@ -238,7 +238,7 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingE
     {
         this->fsm->addMissingNuc(this->fsm->genericCounter);
 
-        if (n == RareSequence::rareSeq[0])
+        if (n == nuca::rareSeq[0])
         {
             this->fsm->stiStack.push(this->fsm->stateNuc);
         }
