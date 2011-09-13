@@ -23,6 +23,11 @@ compressing_decompressing_test.cpp: Nucleotides Compression Algorithms
 #include <gtest/gtest.h>
 #include "nuca.h"
 
+/*
+    The files chr7.fa and chr8.fa are not found within the projectç
+    These can be obtained from http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/
+*/
+
 typedef RemoveNs<AddNs<ExceptionTestLayer<EndLayer> > > TestCompressor;
 
 TEST(CompressingDecompressingChromosome, chromosome7)

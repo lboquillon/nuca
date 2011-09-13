@@ -37,27 +37,27 @@ private:
 
 public:
     typedef char DataType;
-    void setString(std::string&);
+    void setOutputString(std::string&);
     void receiveData(DataType);
     void end(DataType);
 };
 
 template<class LowerLayer>
-void StringTestLayer<LowerLayer>::setString(std::string& str)
+inline void StringTestLayer<LowerLayer>::setOutputString(std::string& str)
 {
     out = &str;
 }
 
 template<class LowerLayer>
-void StringTestLayer<LowerLayer>::receiveData(DataType data)
+inline void StringTestLayer<LowerLayer>::receiveData(DataType data)
 {
-    out->operator+= (data);
+    (*out) += data;
 
     LowerLayer::receiveData(ConvertDataType<StringTestLayer<LowerLayer>, LowerLayer>::convert(data));
 }
 
 template<class LowerLayer>
-void StringTestLayer<LowerLayer>::end(DataType n)
+inline void StringTestLayer<LowerLayer>::end(DataType n)
 {
     LowerLayer::end(n);
 }
@@ -77,8 +77,6 @@ public:
 
     ExceptionTestLayer()
     {
-        nucsIn.clear();
-        nucsOut.clear();
     }
 
     void receiveData(DataType);
@@ -88,7 +86,7 @@ public:
 };
 
 template<class LowerLayer>
-void ExceptionTestLayer<LowerLayer>::receiveData(DataType data)
+inline void ExceptionTestLayer<LowerLayer>::receiveData(DataType data)
 {
 
     nucsOut += data;
@@ -108,10 +106,10 @@ void ExceptionTestLayer<LowerLayer>::receiveData(DataType data)
 }
 
 template<class LowerLayer>
-void ExceptionTestLayer<LowerLayer>::end(DataType /*data*/) { }
+inline void ExceptionTestLayer<LowerLayer>::end(DataType /*data*/) { }
 
 template<class LowerLayer>
-void ExceptionTestLayer<LowerLayer>::setNucTest(DataType nuc)
+inline void ExceptionTestLayer<LowerLayer>::setNucTest(DataType nuc)
 {
     nucsIn += nuc;
 }
