@@ -144,7 +144,7 @@ void DecompressingBitHandler<LowerLayer>::end(DataType size)
 {
     current_bit = 8 - (size << 1);
     flush();
-    LowerLayer::end();
+    LowerLayer::end(size);
 }
 
 #endif

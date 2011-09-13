@@ -143,4 +143,29 @@ public:
     }
 };
 
+template<class LowerType>
+class ConvertDataType<AddNs<ExceptionTestLayer<LowerType> >, ExceptionTestLayer<LowerType> >
+{
+private:
+    typedef ExceptionTestLayer<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename AddNs<Lower>::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+template<class LowerType>
+class ConvertDataType<RemoveNs<AddNs<LowerType> >, AddNs<LowerType> >
+{
+private:
+    typedef AddNs<LowerType> Lower;
+public:
+    static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
+    {
+        return typename Lower::DataType(data);
+    }
+};
+
+
 #endif

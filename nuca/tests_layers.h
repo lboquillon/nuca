@@ -62,4 +62,58 @@ void StringTestLayer<LowerLayer>::end(DataType n)
     LowerLayer::end(n);
 }
 
+template<class UpperLayer, class LowerLayer>
+class ConvertDataType;
+
+template <class LowerLayer>
+class ExceptionTestLayer : public LowerLayer
+{
+private:
+    std::string nucsIn;
+    std::string nucsOut;
+
+public:
+    typedef char DataType;
+
+    ExceptionTestLayer()
+    {
+        nucsIn.clear();
+        nucsOut.clear();
+    }
+
+    void receiveData(DataType);
+    void end(DataType);
+    void setNucTest(DataType);
+
+};
+
+template<class LowerLayer>
+void ExceptionTestLayer<LowerLayer>::receiveData(DataType data)
+{
+
+    nucsOut += data;
+
+    if (nucsIn.size() == nucsOut.size())
+    {
+        if (nucsIn == nucsOut)
+        {
+            nucsIn.clear();
+            nucsOut.clear();
+        }
+        else
+        {
+            throw "Error: Diferent sequence\nIn: " + nucsIn + "\nOut: " + nucsOut + "\n";
+        }
+    }
+}
+
+template<class LowerLayer>
+void ExceptionTestLayer<LowerLayer>::end(DataType /*data*/) { }
+
+template<class LowerLayer>
+void ExceptionTestLayer<LowerLayer>::setNucTest(DataType nuc)
+{
+    nucsIn += nuc;
+}
+
 #endif
