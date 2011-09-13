@@ -36,88 +36,25 @@ convert_type.h: Nucleotides Compression Algorithms
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
-template<class LowerType>
-class ConvertDataType<StringTestLayer<CompressingBitHandler<LowerType> >, CompressingBitHandler<LowerType> >
+template<class UpperLayer, class LowerLayer>
+class ConvertDataType
+{
+public:
+	static typename LowerLayer::DataType convert (typename UpperLayer::DataType data)
+	{
+			return typename LowerLayer::DataType (data);
+	}
+};
+
+template<class UpperLayer, class LowerLayer>
+class ConvertDataType<UpperLayer, CompressingBitHandler<LowerLayer> >
 {
 private:
-    typedef CompressingBitHandler<LowerType> Lower;
+    typedef CompressingBitHandler<LowerLayer> Lower;
 public:
-    static typename Lower::DataType convert(typename CompressingBitHandler<Lower>::DataType data)
+    static typename Lower::DataType convert(typename UpperLayer::DataType data)
     {
         return typename Lower::DataType(to_nuc(data));
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<RemoveNs<StringTestLayer<LowerType> >, StringTestLayer<LowerType> >
-{
-private:
-    typedef StringTestLayer<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<RemoveNs<CompressingBitHandler<LowerType> >, CompressingBitHandler<LowerType> >
-{
-private:
-    typedef CompressingBitHandler<LowerType> Lower;
-
-public:
-    static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
-    {
-        return typename Lower::DataType(to_nuc(data));
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<CompressingBitHandler<OstreamSaver<LowerType> >, OstreamSaver<LowerType> >
-{
-private:
-    typedef OstreamSaver<EndLayer> Lower;
-public:
-    static typename Lower::DataType convert(typename CompressingBitHandler<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<AddNs<StringTestLayer<LowerType> >, StringTestLayer<LowerType> >
-{
-private:
-    typedef StringTestLayer<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename AddNs<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<DecompressingBitHandler<AddNs<LowerType> >, AddNs<LowerType> >
-{
-private:
-    typedef AddNs<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename DecompressingBitHandler<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<CompressingBitHandler<DecompressingBitHandler<LowerType> >, DecompressingBitHandler<LowerType> >
-{
-private:
-    typedef DecompressingBitHandler<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename CompressingBitHandler<DecompressingBitHandler<Lower> >::DataType data)
-    {
-        return typename Lower::DataType(data);
     }
 };
 
@@ -130,42 +67,5 @@ public:
         return char(data);
     }
 };
-
-template<class LowerType>
-class ConvertDataType<IstreamLoader<DecompressingBitHandler<LowerType> >, DecompressingBitHandler<LowerType>  >
-{
-private:
-    typedef DecompressingBitHandler<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename IstreamLoader<DecompressingBitHandler<Lower> >::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<AddNs<ExceptionTestLayer<LowerType> >, ExceptionTestLayer<LowerType> >
-{
-private:
-    typedef ExceptionTestLayer<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename AddNs<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
-template<class LowerType>
-class ConvertDataType<RemoveNs<AddNs<LowerType> >, AddNs<LowerType> >
-{
-private:
-    typedef AddNs<LowerType> Lower;
-public:
-    static typename Lower::DataType convert(typename RemoveNs<Lower>::DataType data)
-    {
-        return typename Lower::DataType(data);
-    }
-};
-
 
 #endif
