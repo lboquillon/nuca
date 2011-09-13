@@ -31,7 +31,7 @@ add_ns.h: Nucleotides Compression Algorithms
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
-template<class LowerLayer>
+template<class LowerLayer, size_t nucsNumber = 4>
 class AddNs : public LowerLayer
 {
 private:
@@ -104,7 +104,8 @@ private:
     const State* const stateReadBit;
     const State* current;
     size_t genericCounter;
-    unsigned char nCounter;
+    static const size_t bitPerNuc = 2;
+    typename nuca::NucMapper<nucsNumber>::NucSizeType nCounter;
     std::stack<const State*> stiStack;
 
     void addNs();
@@ -134,8 +135,8 @@ public:
     void end(char);
 };
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::addNs()
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::addNs()
 {
     if (0 == nCounter)
     {
@@ -149,21 +150,21 @@ inline void AddNs<LowerLayer>::addNs()
     }
 }
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::flush(char c)
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::flush(char c)
 {
-    LowerLayer::receiveData(ConvertDataType<AddNs<LowerLayer>, LowerLayer>::convert(c));
+    LowerLayer::receiveData(ConvertDataType<AddNs<LowerLayer, nucsNumber>, LowerLayer>::convert(c));
 }
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::addMissingNuc(size_t n)
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::addMissingNuc(size_t n)
 {
     for (size_t i = 0; i < n; ++i)
         flush(nuca::rareSeq[i]);
 }
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::receiveData(char sti)
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::receiveData(char sti)
 {
     if (current == NULL)
         throw "Invalid State";
@@ -177,22 +178,22 @@ inline void AddNs<LowerLayer>::receiveData(char sti)
     }
 }
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::end(char)
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::end(char)
 {
     current->stimulusEndSeq();
 
 }
 
-template<class LowerLayer>
-inline void AddNs<LowerLayer>::receiveData(nuca::EndSeqStimulus)
+template<class LowerLayer, size_t nucsNumber>
+inline void AddNs<LowerLayer, nucsNumber>::receiveData(nuca::EndSeqStimulus)
 {
     current->stimulusEndSeq();
 
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateNuc::stimulusNuc(char n) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateNuc::stimulusNuc(char n) const
 {
     const State* state;
 
@@ -210,14 +211,14 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateNuc::sti
     return state;
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateNuc::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateNuc::stimulusEndSeq() const
 {
     return NULL;
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingEscapeSequence::stimulusNuc(char n) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateReadingEscapeSequence::stimulusNuc(char n) const
 {
     const State* state;
 
@@ -255,21 +256,21 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingE
     return state;
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingEscapeSequence::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateReadingEscapeSequence::stimulusEndSeq() const
 {
     this->fsm->addMissingNuc(this->fsm->genericCounter);
     return NULL;
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingNCount::stimulusNuc(char n) const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateReadingNCount::stimulusNuc(char n) const
 {
     const State* state;
 
-    this->fsm->nCounter = (this->fsm->nCounter << 2) | to_nuc(n);
+    this->fsm->nCounter = (this->fsm->nCounter << bitPerNuc) | to_nuc(n);
 
-    if (this->fsm->genericCounter < 4)
+    if (this->fsm->genericCounter < nucsNumber)
     {
         ++this->fsm->genericCounter;
         state = this;
@@ -285,8 +286,8 @@ inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingN
     return state;
 }
 
-template<class LowerLayer>
-inline const typename AddNs<LowerLayer>::State* AddNs<LowerLayer>::StateReadingNCount::stimulusEndSeq() const
+template<class LowerLayer, size_t nucsNumber>
+inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nucsNumber>::StateReadingNCount::stimulusEndSeq() const
 {
     return NULL;
 }
