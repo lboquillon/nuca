@@ -38,7 +38,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile1)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
 
     std::ifstream is("file.out", std::ios_base::binary);
@@ -64,7 +64,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile2)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
 
     std::ifstream is("file.out", std::ios_base::binary);
@@ -90,7 +90,7 @@ TEST(CompressingDecompressingFile, compressingDecompressingFile3)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
     of.close();
 
     std::ifstream is("file.out", std::ios_base::binary);

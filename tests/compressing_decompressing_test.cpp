@@ -35,7 +35,7 @@ TEST(CompressingDecompressingTest, compressingDecompressing1)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
 
     ASSERT_EQ(out, sequence);
 }
@@ -50,7 +50,7 @@ TEST(CompressingDecompressingTest, compressingDecompressing2)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
 
     ASSERT_EQ(out, sequence);
 }
@@ -66,7 +66,7 @@ TEST(CompressingDecompressingTest, compressingDecompressing3)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
 
     ASSERT_EQ(out, sequence);
 }
@@ -81,7 +81,7 @@ TEST(CompressingDecompressingTest, compressingDecompressing4)
     for (std::string::const_iterator it = sequence.begin(); it < sequence.end(); ++it)
         cmpr.receiveData(*it);
 
-    cmpr.receiveData(EndSeq);
+    cmpr.receiveData(nuca::EndSeq);
 
     ASSERT_EQ(out, sequence);
 }
