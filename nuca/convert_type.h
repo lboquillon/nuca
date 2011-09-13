@@ -58,14 +58,4 @@ public:
     }
 };
 
-template<>
-class ConvertDataType<StringTestLayer<EndLayer>, EndLayer>
-{
-public:
-    static char convert(typename StringTestLayer<EndLayer>::DataType data)
-    {
-        return char(data);
-    }
-};
-
 #endif
