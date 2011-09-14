@@ -97,8 +97,11 @@ private:
     size_t stimuliOrder;
     std::stack<const State*> stiStack;
     char sizeNuc;
-    static const size_t oneCharSize = 1;
-    static const size_t bitPerNuc = 2;
+    enum CompressingConst
+    {
+        oneCharSize = 1,
+        bitPerNuc
+    };
 
     void addMissingNuc(size_t);
     void makeEscapeSequence();

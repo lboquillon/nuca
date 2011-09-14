@@ -105,7 +105,10 @@ private:
     const State* const stateReadBit;
     const State* current;
     size_t genericCounter;
-    static const size_t bitPerNuc = 2;
+    enum DecompressingConst
+    {
+        bitPerNuc = 2
+    };
     typename nuca::NucMapper<nucsNumber>::NucSizeType nCounter;
     std::stack<const State*> stiStack;
 
