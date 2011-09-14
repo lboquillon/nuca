@@ -25,6 +25,7 @@ add_ns.h: Nucleotides Compression Algorithms
 
 #include <stack>
 #include "fsm.h"
+#include "nuc_mapper.h"
 
 #include <biopp/bio_molecular/bio_molecular.h>
 
