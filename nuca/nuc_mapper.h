@@ -1,5 +1,5 @@
 /*
-add_ns.h: Nucleotides Compression Algorithms
+nuc_mapper.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
