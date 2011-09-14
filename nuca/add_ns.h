@@ -105,7 +105,7 @@ private:
     const State* const stateReadBit;
     const State* current;
     size_t genericCounter;
-    enum DecompressingConst
+    enum
     {
         bitPerNuc = 2
     };

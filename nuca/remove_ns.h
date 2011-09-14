@@ -97,10 +97,10 @@ private:
     size_t stimuliOrder;
     std::stack<const State*> stiStack;
     char sizeNuc;
-    enum CompressingConst
+    enum
     {
         oneCharSize = 1,
-        bitPerNuc
+        bitPerNuc = 2
     };
 
     void addMissingNuc(size_t);
