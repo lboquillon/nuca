@@ -24,12 +24,14 @@ convert_type.h: Nucleotides Compression Algorithms
 #define CONVERT_TYPE_H
 
 #include "end_layer.h"
+#include "statistics_layer.h"
 #include "ostream_saver.h"
 #include "bit_handler.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
 #include "add_ns.h"
 #include "istream_loader.h"
+
 
 #include <biopp/bio_molecular/bio_molecular.h>
 

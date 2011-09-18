@@ -24,7 +24,7 @@ compressing_decompressing_test.cpp: Nucleotides Compression Algorithms
 #include "nuca.h"
 
 /*
-    The files chr7.fa and chr8.fa are not found within the project
+    The files chr7.fa and chr8.fa are not found within the projectç
     These can be obtained from http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/
 */
 
@@ -50,7 +50,9 @@ TEST(CompressingDecompressingChromosome, chromosome7)
     }
 
     chr.close();
+
     cmpr.receiveData(nuca::EndSeq);
+
 }
 
 TEST(CompressingDecompressingChromosome, chromosome8)
@@ -71,5 +73,7 @@ TEST(CompressingDecompressingChromosome, chromosome8)
     }
 
     chr.close();
+
     cmpr.receiveData(nuca::EndSeq);
+
 }

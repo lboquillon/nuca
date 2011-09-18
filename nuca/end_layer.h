@@ -28,6 +28,12 @@ class EndLayer
 public:
     typedef char DataType;
 
+protected:
+    void countEscapeSequence(size_t) { }
+    void countInput() { }
+    void countOutput() { }
+
+public:
     void receiveData(char) { }
     void end(char) { }
 };

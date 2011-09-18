@@ -26,6 +26,7 @@ remove_ns.h: Nucleotides Compression Algorithms
 #include <stack>
 #include "fsm.h"
 #include "nuc_mapper.h"
+#include "statistics_layer.h"
 
 using namespace std;
 
@@ -142,6 +143,8 @@ inline void RemoveNs<LowerLayer, nucsNumber>::addMissingNuc(size_t n)
 template<class LowerLayer, size_t nucsNumber>
 inline void RemoveNs<LowerLayer, nucsNumber>::makeEscapeSequence()
 {
+    LowerLayer::countEscapeSequence(ns);
+
     for (size_t i = 0; i < nuca::rareSeq.size(); ++i)
         flush(nuca::rareSeq[i]);
 
@@ -160,6 +163,9 @@ inline void RemoveNs<LowerLayer, nucsNumber>::makeEscapeSequence()
 template<class LowerLayer, size_t nucsNumber>
 inline void RemoveNs<LowerLayer, nucsNumber>::receiveData(DataType sti)
 {
+
+    LowerLayer::countInput();
+
     if (current == NULL)
         throw "Invalid State";
 
@@ -195,6 +201,8 @@ inline void RemoveNs<LowerLayer, nucsNumber>::end()
 template<class LowerLayer, size_t nucsNumber>
 inline void RemoveNs<LowerLayer, nucsNumber>::flush(char c)
 {
+    LowerLayer::countOutput();
+
     // (n1 + n2) % k = ((n1 % k) + (n2 % k)) % k
     sizeNuc = (sizeNuc + (oneCharSize % nucsNumber)) % nucsNumber;
     LowerLayer::receiveData(ConvertDataType<RemoveNs<LowerLayer, nucsNumber>, LowerLayer>::convert(c));
