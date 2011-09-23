@@ -32,7 +32,26 @@ enum EndSeqStimulus
     EndSeq
 };
 
-static const std::string rareSeq = "ACTG";
+/*
+    justification of sequence choice
+
+    Sequence   Chr 12      Chr 8
+    ACTG       573121     630235
+    AGTC       390835     429101
+    CGTA        56132      63786
+    CGAT        66736      70548
+    CTAG       356350     388702
+    GCTA       349476     375216
+    CTGA       656105     716670
+    ATCG        67100      70490
+    TACG        55883      63289
+    TGCA       648464     717338
+    TCGA        69483      71394
+    GTCA       405210     452050
+    ACGT        95910     110463
+*/
+
+static const std::string rareSeq = "TACG";
 
 inline char valueToNuc(size_t value)
 {
