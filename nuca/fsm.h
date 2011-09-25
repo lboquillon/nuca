@@ -51,7 +51,7 @@ enum EndSeqStimulus
     ACGT        95910     110463
 */
 
-static const std::string rareSeq = "TACG";
+static const std::string rareSeq = "TACGAC";
 
 inline char valueToNuc(size_t value)
 {
