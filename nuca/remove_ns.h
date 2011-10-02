@@ -88,8 +88,6 @@ private:
         }
     };
 
-    template<class T> friend class AddLayerTest;
-
     const State* const stateNotN;
     const State* const stateN;
     const State* const stateReadingSequence;
