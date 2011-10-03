@@ -1,0 +1,9 @@
+{
+	"len" : 15000000
+	,
+	
+	"chromosomes" : [
+		{ "name" :  "chromosome8",  "file" :   "chr8.fa", "out" :  "chr8.png"},
+		{ "name" :  "chromosome17", "file" :  "chr17.fa", "out" : "chr17.png"}
+	]
+}
