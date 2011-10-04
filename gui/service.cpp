@@ -1,8 +1,8 @@
-#include "nuca.h"
 #include <string>
 #include <cctype>
+#include "nuca.h"
 
-inline void compression(std::string fileIn, std::string fileOut)
+void compression(const std::string& fileIn, const std::string& fileOut)
 {
     std::ofstream os(fileOut.c_str(), std::ios_base::binary);
     RemoveNs<CompressingBitHandler<OstreamSaver<EndLayer> > > compressor;
@@ -20,10 +20,9 @@ inline void compression(std::string fileIn, std::string fileOut)
     }
 
     compressor.receiveData(nuca::EndSeq);
-    os.close();
 }
 
-inline void decompression(std::string fileIn, std::string fileOut)
+void decompression(const std::string& fileIn, const std::string& fileOut)
 {
     IstreamLoader<DecompressingBitHandler<AddNs<OstreamSaver<EndLayer> > > > decompressor;
 
@@ -34,8 +33,4 @@ inline void decompression(std::string fileIn, std::string fileOut)
     decompressor.setOstream(os);
 
     decompressor.run();
-
-    is.close();
-    os.close();
-
 }
