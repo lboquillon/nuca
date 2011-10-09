@@ -1,9 +1,24 @@
 {
-	"len" : 15000000
+	"len" : 25000000
 	,
 	
 	"chromosomes" : [
-		{ "name" :  "chromosome8",  "file" :   "chr8.fa", "out" :  "chr8.png"},
-		{ "name" :  "chromosome17", "file" :  "chr17.fa", "out" : "chr17.png"}
+		{      "name" : "chromosome17",  
+		       "file" : "chr17.fa", 
+		  "out_compr" : "chr17_compression.png",
+		   "out_exec" : "chr17_execution.png"
+		}
+		,
+		{      "name" : "chromosome8",  
+		       "file" : "chr8.fa", 
+		  "out_compr" : "chr8_compression.png",
+		   "out_exec" : "chr8_execution.png"
+		}
+		,
+		{      "name" : "chromosome20",  
+		       "file" : "chr20.fa", 
+		  "out_compr" : "chr20_compression.png",
+		   "out_exec" : "chr20_execution.png"
+		}
 	]
 }

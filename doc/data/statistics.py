@@ -6,34 +6,28 @@ import os
 import json
 import shutil
 import numpy
+import time
 import matplotlib.pyplot
 from subprocess import *
 
-def suml (li, value):
-	ret = []
-	
-	for i in li:
-		ret.append (i + value)
-		
-	return ret
-
-def save_graphics (nuca_data, zip_data, bzip2_data, file_out, seq):
-	
-	lendata = len(nuca_data)
-	width = 0.30
+def save_graphics (nuca_data, zip_data, bzip2_data, y_range, file_out, n, len_f):
 	
 	figure = matplotlib.pyplot.figure(figsize=(12, 10))
+	t = numpy.arange (5, 5 * (n + 1), 5)
+	x = numpy.arange (5, 5 * (n + 2), 5)
 	
 	ax = figure.add_subplot (111)
-	nuca_rect = ax.bar (range (lendata), nuca_data, width, facecolor='blue', align='center')
-	zip_rect = ax.bar (suml (range (lendata), width), zip_data, width, facecolor='red', align='center')
-	bzip2_rect = ax.bar (suml (range (lendata), width * 2), bzip2_data, width, facecolor='green', align='center')
-	matplotlib.pyplot.yticks (numpy.arange (0, 0.90, 0.03))
-	ax.set_xticks (suml (range (lendata), width))
-	ax.set_xticklabels (seq)
-	ax.legend ((nuca_rect[0], zip_rect[0], bzip2_rect[0]), ("NUCA", "Zip", "Bzip2"))
+	ax.plot (t, nuca_data, 'o-', label = "NUCA")
+	ax.plot (t, zip_data, 'o-', label = "Zip")
+	ax.plot (t, bzip2_data, 'o-', label = "Bzip2")
+	matplotlib.pyplot.yticks (y_range)
+	
+	ax.set_xticks (x)
+	ax.set_xticklabels (map (lambda x : str (x), numpy.arange (len_f, len_f * (n + 1) + 1, len_f)))
+	ax.grid (True)
+	
+	ax.legend (('NUCA', 'Zip', 'Bzip2'), bbox_to_anchor=(1, 1), loc=1, borderaxespad=0)
 	figure.autofmt_xdate()
-
 	figure.savefig (file_out)
 	
 def create_files (orig, size, name, n):
@@ -63,50 +57,38 @@ def create_files (orig, size, name, n):
 		shutil.copy (name, name + str(i))
 		
 	os.remove (name)
-	
+
 	return valid
 	
-		
 def calculate_percent (orig, finall):
-	
 	return (1.0 - (float(finall) / orig))
-
-def nuca_out (l, filen):
 	
-	ret = calculate_percent(l, int(Popen(["./nuca", filen], stdout=PIPE).communicate()[0]))
-
+def calculate_compresion (args, size_str, filen, fil_del):
+	
+	start_time = time.time()
+	proc = Popen (args, stdout=PIPE)
+	proc.wait()
+	total_time = time.time() - start_time
+	per = calculate_percent(size_str, os.path.getsize(filen) - 1)
 	os.remove (filen)
 	
-	return ret
-
-def zip_out (l, filen):
+	if (os.path.isfile (fil_del)):
+		os.remove (fil_del)
 	
-	Popen(["gzip", filen], stdout=PIPE).communicate()[0]
-	
-	ret = calculate_percent(l, os.path.getsize(filen + ".gz") - 1)
- 	
-	os.remove (filen + ".gz")
-	
-	return ret
-	
-def bzip2_out (l, filen):
-	
-	Popen(["bzip2", filen], stdout=PIPE).communicate()[0]
-	
-	ret = calculate_percent(l, os.path.getsize(filen + ".bz2") - 1)
-	
-	os.remove (filen + ".bz2")
-	
-	return ret
+	return (per, total_time)
 	
 if __name__ == "__main__":
 	data = json.load(open("data.json"))
 
 	for chromosomes in data["chromosomes"]:
 		
-		nuca_l = []
-		bzip2_l = []
-		zip_l = []
+		nuca_cmpr = []
+		bzip2_cmpr = []
+		zip_cmpr = []
+		nuca_exec = []
+		bzip2_exec = []
+		zip_exec = []
+		
 		n = 1
 		
 		size = data["len"]
@@ -119,13 +101,21 @@ if __name__ == "__main__":
 			
 			valid = create_files (chromosomes["file"], size, filen, 3)
 			
-			nuca_l.append (nuca_out (size, filen + str(1)))
-			zip_l.append (zip_out (size, filen + str(2)))
-			bzip2_l.append (bzip2_out (size, filen + str(3)))
+			nuca_pair = calculate_compresion (["./nuca", filen + str(1), filen + str(1) + ".nuca"], size, filen + str(1) + ".nuca", filen + str(1))
+			zip_pair = calculate_compresion (["gzip", filen + str (2)], size, filen + str (2) + ".gz", filen + str(2))
+			bzip2_pair = calculate_compresion (["bzip2", filen + str (3)], size, filen + str (3) + ".bz2", filen + str(3))
 			
-			print nuca_l, zip_l, bzip2_l
+			nuca_cmpr.append (nuca_pair[0])
+			zip_cmpr.append (zip_pair[0])
+			bzip2_cmpr.append (bzip2_pair[0])
+			
+			nuca_exec.append (nuca_pair[1])
+			zip_exec.append (zip_pair[1])
+			bzip2_exec.append (bzip2_pair[1])
+			
 			size = size + data["len"]
 			filen = chromosomes["name"] + str(size)
 			n = n + 1
 			
-		save_graphics (nuca_l, zip_l, bzip2_l, chromosomes["out"], numpy.arange (data["len"], n * data["len"], data["len"]))
+		save_graphics (nuca_cmpr, zip_cmpr, bzip2_cmpr, numpy.arange (0, 0.90, 0.03), chromosomes["out_compr"], n - 1, data["len"])
+		save_graphics (nuca_exec, zip_exec, bzip2_exec, numpy.arange (0, 60, 2), chromosomes["out_exec"], n - 1, data["len"])
