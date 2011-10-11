@@ -320,8 +320,9 @@ inline const typename RemoveNs<LowerLayer, nucsNumber>::State* RemoveNs<LowerLay
         else
         {
             this->fsm->flush(c);
-            state = this->fsm->stateNotN;
         }
+
+        state = this->fsm->stateNotN;
     }
 
     return state;
