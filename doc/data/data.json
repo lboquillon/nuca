@@ -5,15 +5,15 @@
 	"chromosomes" : 
 	[
 		{      
-			   "show" : "Chromosome 17",
-			   "name" : "chromosome17",  
+		       "show" : "Chromosome 17",
+		       "name" : "chromosome17",  
 		       "file" : "chr17.fa", 
 		  "out_compr" : "chr17_compression.png",
 		   "out_exec" : "chr17_execution.png"
 		}
 		,
 		{
-			   "show" : "Chromosome 8",
+		       "show" : "Chromosome 8",
 		       "name" : "chromosome8",  
 		       "file" : "chr8.fa", 
 		  "out_compr" : "chr8_compression.png",
