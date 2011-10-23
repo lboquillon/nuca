@@ -5,9 +5,9 @@
 typedef RemoveNs<CompressingBitHandler<OstreamSaver<EndLayer> > > Compressor;
 typedef IstreamLoader<DecompressingBitHandler<AddNs<OstreamSaver<EndLayer> > > > Decompressor;
 
-void compress (char* orig, char* dest)
+void compress(char* orig, char* dest)
 {
-	Compressor cmpr;
+    Compressor cmpr;
     std::ifstream is;
     std::ofstream os(dest, std::ios_base::binary);
     char c;
@@ -21,9 +21,9 @@ void compress (char* orig, char* dest)
     cmpr.receiveData(nuca::EndSeq);
 }
 
-void decompress (char* orig, char* dest)
+void decompress(char* orig, char* dest)
 {
-	Decompressor dcmpr;
+    Decompressor dcmpr;
 
     std::ifstream is(orig, std::ios_base::binary);
     std::ofstream os(dest);
@@ -36,14 +36,14 @@ void decompress (char* orig, char* dest)
 
 int main(int argc, char* argv[])
 {
-	if (!strcmp (argv[1], "-c"))
-	{
-		compress (argv[2], argv[3]);
-	}
-	else if (!strcmp (argv[1], "-d"))
-	{
-		decompress (argv[2], argv[3]);
-	}
+    if (!strcmp(argv[1], "-c"))
+    {
+        compress(argv[2], argv[3]);
+    }
+    else if (!strcmp(argv[1], "-d"))
+    {
+        decompress(argv[2], argv[3]);
+    }
 
     return 0;
 }
