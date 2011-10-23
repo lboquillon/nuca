@@ -4,18 +4,20 @@ import json
 import numpy
 import matplotlib.pyplot
 
-def save_graphics (nuca_data, zip_data, bzip2_data, y_range, file_out, n, len_f):
+def save_graphics (nuca_data, zip_data, bzip2_data, y_range, file_out, n, len_f, y_label, x_label):
 	
 	figure = matplotlib.pyplot.figure(figsize = (12, 10))
 	t = numpy.arange (5, 5 * n, 5)
 	x = numpy.arange (5, 5 * (n + 1), 5)
 	
 	ax = figure.add_subplot (111)
-	ax.plot (t, nuca_data, 'o-', label = "NUCA")
-	ax.plot (t, zip_data, 'o-', label = "Zip")
-	ax.plot (t, bzip2_data, 'o-', label = "Bzip2")
+	ax.plot (t, nuca_data, 'o-', label = "NUCA", color = '#2E00B8')
+	ax.plot (t, zip_data, 'o-', label = "Zip", color = '#0033CC')
+	ax.plot (t, bzip2_data, 'o-', label = "Bzip2", color = '#FF3300')
 	matplotlib.pyplot.yticks (y_range)
 	
+	ax.set_xlabel (x_label)
+	ax.set_ylabel (y_label)
 	ax.set_xticks (x)
 	ax.set_xticklabels (map (lambda x : str (x), numpy.arange (len_f, len_f * n + 1, len_f)))
 	ax.grid (True)
@@ -58,7 +60,7 @@ if __name__ == "__main__":
 			dzip.append (data_chro['compression'][key]['Zip'])
 			dbzip2.append (data_chro['compression'][key]['Bzip2'])
 
-		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 0.90, 0.03), chro + '_compression.png', 1 + len (dnuca), data_in['len'])
+		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 0.90, 0.03), chro + '_compression.png', 1 + len (dnuca), data_in['len'], 'PERCENT', 'LENGTH')
 		
 		del dnuca[:]
 		del dzip[:]
@@ -70,7 +72,7 @@ if __name__ == "__main__":
 			dzip.append (data_chro['execution_compression'][key]['Zip'])
 			dbzip2.append (data_chro['execution_compression'][key]['Bzip2'])
 		
-		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 60, 2), chro + '_execution_compression.png', 1 + len (dnuca), data_in['len'])
+		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 60, 2), chro + '_execution_compression.png', 1 + len (dnuca), data_in['len'], 'SECONDS', 'LENGTH')
 		
 		del dnuca[:]
 		del dzip[:]
@@ -82,7 +84,7 @@ if __name__ == "__main__":
 			dzip.append (data_chro['execution_decompression'][key]['Zip'])
 			dbzip2.append (data_chro['execution_decompression'][key]['Bzip2'])
 			
-		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 60, 2), chro + '_execution_decompression.png', 1 + len (dnuca), data_in['len'])
+		save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 60, 2), chro + '_execution_decompression.png', 1 + len (dnuca), data_in['len'], 'SECONDS', 'LENGTH')
 		
 		del dnuca[:]
 		del dzip[:]
@@ -97,4 +99,4 @@ if __name__ == "__main__":
 		dzip.append (sum_compr['Zip'][key] / float (value))
 		dbzip2.append (sum_compr['Bzip2'][key] / float (value))
 		
-	save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 0.90, 0.03), 'average_compression.png', len (dnuca) + 1, data_in['len'])
+	save_graphics (dnuca, dzip, dbzip2, numpy.arange (0, 0.90, 0.03), 'average_compression.png', len (dnuca) + 1, data_in['len'], 'PERCENT', 'LENGTH')
