@@ -11,9 +11,9 @@ def save_graphics (nuca_data, zip_data, bzip2_data, y_range, file_out, n, len_f,
 	x = numpy.arange (5, 5 * (n + 1), 5)
 	
 	ax = figure.add_subplot (111)
-	ax.plot (t, nuca_data, 'o-', label = "NUCA", color = '#2E00B8')
-	ax.plot (t, zip_data, 'o-', label = "Zip", color = '#0033CC')
-	ax.plot (t, bzip2_data, 'o-', label = "Bzip2", color = '#FF3300')
+	ax.plot (t, nuca_data, 'o-', label = "NUCA", color = 'r')
+	ax.plot (t, zip_data, 'o-', label = "Zip", color = '#000000')
+	ax.plot (t, bzip2_data, 'o-', label = "Bzip2", color = '#0033CC')
 	matplotlib.pyplot.yticks (y_range)
 	
 	ax.set_xlabel (x_label)
