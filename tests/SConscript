@@ -1,7 +1,7 @@
 Import ('env')
 
 name = 'nuca'
-inc = env.Dir('../nuca')
+inc = env.Dir('.')
 src = env.Glob('*.cpp')
 deps = ['nuca', 'gmock', 'gtest_main']
 CXXFLAGS = ['-Wall', '-ansi', '-lpthread',]
