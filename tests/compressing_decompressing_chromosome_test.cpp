@@ -21,7 +21,7 @@ compressing_decompressing_test.cpp: Nucleotides Compression Algorithms
 */
 
 #include <gtest/gtest.h>
-#include "nuca.h"
+#include "nuca/nuca.h"
 
 /*
     The files chr7.fa and chr8.fa are not found within the projectç
