@@ -1,6 +1,6 @@
 #include <string>
 #include <cctype>
-#include "nuca.h"
+#include "nuca/nuca.h"
 
 void compression(const std::string& fileIn, const std::string& fileOut)
 {
