@@ -1,0 +1,10 @@
+Import ('env')
+ 
+name = 'appnuca'
+inc = env.Dir('.')
+src = env.Glob('*.cpp')
+
+deps = ['nuca', 'QtCore','QtGui']
+ 
+env.Uic4(Glob('*.ui'))
+env.CreateProgram(name, inc, src, deps)
