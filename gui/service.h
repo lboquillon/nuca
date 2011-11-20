@@ -5,7 +5,7 @@
 #ifndef SERVICE_H
 #define SERVICE_H
 
-inline void compression(const std::string& fileIn, const std::string& fileOut)
+void compression(const std::string& fileIn, const std::string& fileOut)
 {
     std::ofstream os(fileOut.c_str(), std::ios_base::binary);
     RemoveNs<CompressingBitHandler<OstreamSaver<EndLayer> > > compressor;
@@ -25,7 +25,7 @@ inline void compression(const std::string& fileIn, const std::string& fileOut)
     compressor.receiveData(nuca::EndSeq);
 }
 
-inline void decompression(const std::string& fileIn, const std::string& fileOut)
+void decompression(const std::string& fileIn, const std::string& fileOut)
 {
     IstreamLoader<DecompressingBitHandler<AddNs<OstreamSaver<EndLayer> > > > decompressor;
 
