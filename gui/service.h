@@ -3,15 +3,10 @@
 
 #include <iostream>
 #include <fstream>
-#include "nuca.h"
+#include "nuca/nuca.h"
 
-class Service
-{
-public:
-    Service();
-    static void compression(const std::string& fileIn, const std::string& fileOut);
-    static void decompression(const std::string& fileIn, const std::string& fileOut);
+void compression(const std::string& fileIn, const std::string& fileOut);
 
-};
+void decompression(const std::string& fileIn, const std::string& fileOut);
 
 #endif
