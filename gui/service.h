@@ -2,7 +2,10 @@
 #include <cctype>
 #include "nuca/nuca.h"
 
-void compression(const std::string& fileIn, const std::string& fileOut)
+#ifndef SERVICE_H
+#define SERVICE_H
+
+inline void compression(const std::string& fileIn, const std::string& fileOut)
 {
     std::ofstream os(fileOut.c_str(), std::ios_base::binary);
     RemoveNs<CompressingBitHandler<OstreamSaver<EndLayer> > > compressor;
@@ -22,7 +25,7 @@ void compression(const std::string& fileIn, const std::string& fileOut)
     compressor.receiveData(nuca::EndSeq);
 }
 
-void decompression(const std::string& fileIn, const std::string& fileOut)
+inline void decompression(const std::string& fileIn, const std::string& fileOut)
 {
     IstreamLoader<DecompressingBitHandler<AddNs<OstreamSaver<EndLayer> > > > decompressor;
 
@@ -34,3 +37,5 @@ void decompression(const std::string& fileIn, const std::string& fileOut)
 
     decompressor.run();
 }
+
+#endif
