@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QDir>
-
+#include "service.h"
 
 namespace Ui
 {
