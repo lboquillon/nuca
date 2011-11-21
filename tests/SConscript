@@ -1,0 +1,11 @@
+Import ('env')
+
+name = 'nuca'
+inc = env.Dir('.')
+src = env.Glob('*.cpp')
+deps = ['nuca', 'gmock', 'gtest_main']
+CXXFLAGS = ['-Wall', '-ansi', '-lpthread',]
+
+env.Replace(CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
+env.CreateTest(name, inc, src, deps)
+

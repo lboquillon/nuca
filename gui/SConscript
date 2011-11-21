@@ -1,0 +1,13 @@
+Import ('env')
+ 
+name = 'DnaCompressor'
+inc = env.Dir('.')
+src = env.Glob('*.cpp')
+
+CXXFLAGS = ['-Wno-long-long']
+deps = ['nuca', 'QtCore','QtGui']
+
+env.Uic4(Glob('*.ui'))
+env.Replace(CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
+env.CreateProgram(name, inc, src, deps)
+

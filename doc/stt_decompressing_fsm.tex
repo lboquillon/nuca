@@ -1,0 +1,18 @@
+\documentclass[12pt]{article}
+
+\title {State transition table}
+
+\begin{document}
+	\begin{center}
+		{\large \textbf{\textsc{State transition table}}}\\\vspace{12mm}
+
+		\begin{tabular}{ | l | l | l | l | l | l |}
+			\hline
+    			& Nuc & escapeChar & N Nuc & 4th N Nuc & endSeq				\\ \hline
+			start & stateNuc & stateRareSeq & Error & Error & Exit			\\ \hline
+			stateNuc & stateNuc & stateRareSeq & Error & Error & Exit 		\\ \hline
+			stateRareSeq & stateNuc & stateRareSeq & stateReadingN & Error & Exit 	\\ \hline
+			stateReadingN & Error & Error & stateReadingN & start & Exit		\\ \hline
+		\end{tabular}
+	\end{center}
+\end{document}
