@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include "service.h"
 
 void compression(const std::string& fileIn, const std::string& fileOut)
