@@ -1,6 +1,6 @@
 Import ('env')
  
-name = 'NUCADnaCompressor'
+name = 'DnaCompressor'
 inc = env.Dir('.')
 src = env.Glob('*.cpp')
 
