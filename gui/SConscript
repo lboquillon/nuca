@@ -8,6 +8,6 @@ CXXFLAGS = ['-Wno-long-long']
 deps = ['nuca', 'QtCore','QtGui']
 
 env.Uic4(Glob('*.ui'))
-env.Replace(CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
+env.Append(CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
 env.CreateProgram(name, inc, src, deps)
 
