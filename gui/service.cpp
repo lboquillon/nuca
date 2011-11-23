@@ -16,7 +16,7 @@ void compression(const std::string& fileIn, const std::string& fileOut)
 
         while (getline(is, str))
         {
-            if (!str.empty() > 0 && str[0] != '>')
+            if (!str.empty() && str[0] != '>')
                 for (size_t i = 0; i < str.size(); ++i)
                 {
                     char c = toupper(str[i]);
