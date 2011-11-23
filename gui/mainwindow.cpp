@@ -23,7 +23,7 @@ void MainWindow::on_btnExploreCom_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
         msgBox.exec();
     }
 }
@@ -42,7 +42,7 @@ void MainWindow::on_compressButton_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
         msgBox.exec();
     }
 }
@@ -57,7 +57,7 @@ void MainWindow::on_btnExploreDec_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
         msgBox.exec();
     }
 }
@@ -76,7 +76,7 @@ void MainWindow::on_decompressButton_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
         msgBox.exec();
     }
 

@@ -9,17 +9,29 @@ void compression(const std::string& fileIn, const std::string& fileOut)
     compressor.setOstream(os);
 
     std::ifstream is(fileIn.c_str());
-    char c;
-
-    while (is.get(c))
+    if (is)
     {
-        c = toupper(c);
 
-        if (c == 'C' || c == 'T' || c == 'G' || c == 'A' || c == 'N')
-            compressor.receiveData(c);
+        std::string str;
+
+        while (getline(is, str))
+        {
+            if (str.size() > 0 && str[0] != '>')
+                for (size_t i = 0; i < str.size(); ++i)
+                {
+                    char c = toupper(str[i]);
+                    if (c == 'C' || c  == 'T' || c == 'G' || c == 'A' || c == 'N')
+                        compressor.receiveData(c);
+                }
+        }
+
+        compressor.receiveData(nuca::EndSeq);
+    }
+    else
+    {
+        throw "An error has occurred";
     }
 
-    compressor.receiveData(nuca::EndSeq);
 }
 
 void decompression(const std::string& fileIn, const std::string& fileOut)
