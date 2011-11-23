@@ -16,7 +16,7 @@ void compression(const std::string& fileIn, const std::string& fileOut)
 
         while (getline(is, str))
         {
-            if (str.size() > 0 && str[0] != '>')
+            if (!str.empty() > 0 && str[0] != '>')
                 for (size_t i = 0; i < str.size(); ++i)
                 {
                     char c = toupper(str[i]);
@@ -29,7 +29,7 @@ void compression(const std::string& fileIn, const std::string& fileOut)
     }
     else
     {
-        throw "An error has occurred";
+        throw "The file was not found";
     }
 
 }
