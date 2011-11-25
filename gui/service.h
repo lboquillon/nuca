@@ -2,7 +2,6 @@
 #define SERVICE_H
 
 #include <string>
-#include "nuca/nuca.h"
 
 void compression(const std::string& fileIn, const std::string& fileOut);
 

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "aboutdialog.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -23,7 +24,7 @@ void MainWindow::on_btnExploreCom_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
         msgBox.exec();
     }
 }
@@ -42,7 +43,7 @@ void MainWindow::on_compressButton_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
         msgBox.exec();
     }
 }
@@ -57,7 +58,7 @@ void MainWindow::on_btnExploreDec_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
         msgBox.exec();
     }
 }
@@ -76,7 +77,7 @@ void MainWindow::on_decompressButton_clicked()
     }
     else
     {
-        QMessageBox msgBox(QMessageBox::Information, "NUCA", "A file must be selected");
+        QMessageBox msgBox(QMessageBox::Information, "NUCA", "Must be select a file");
         msgBox.exec();
     }
 
@@ -85,4 +86,11 @@ void MainWindow::on_decompressButton_clicked()
 void MainWindow::on_exit_triggered()
 {
     QCoreApplication::exit();
+}
+
+void MainWindow::on_about_triggered()
+{
+    AboutDialog about(this);
+    about.exec();
+
 }

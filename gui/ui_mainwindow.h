@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Nov 21 15:21:39 2011
+** Created: Thu Nov 24 19:41:38 2011
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -31,6 +31,7 @@ class Ui_MainWindow
 {
 public:
     QAction* exit;
+    QAction* about;
     QWidget* centralWidget;
     QFrame* frame;
     QTabWidget* tabWidget;
@@ -50,6 +51,7 @@ public:
     QPushButton* decompressButton;
     QMenuBar* menuBar;
     QMenu* menuFile;
+    QMenu* menuHelp;
 
     void setupUi(QMainWindow* MainWindow)
     {
@@ -58,6 +60,8 @@ public:
         MainWindow->resize(510, 252);
         exit = new QAction(MainWindow);
         exit->setObjectName(QString::fromUtf8("exit"));
+        about = new QAction(MainWindow);
+        about->setObjectName(QString::fromUtf8("about"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         frame = new QFrame(centralWidget);
@@ -116,10 +120,14 @@ public:
         menuBar->setGeometry(QRect(0, 0, 510, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
         menuFile->addAction(exit);
+        menuHelp->addAction(about);
 
         retranslateUi(MainWindow);
 
@@ -133,6 +141,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Nuca: Nucleotide Compression Algorithms", 0, QApplication::UnicodeUTF8));
         exit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
+        about->setText(QApplication::translate("MainWindow", "About", 0, QApplication::UnicodeUTF8));
         labelInputCompression->setText(QApplication::translate("MainWindow", "File to Compress:", 0, QApplication::UnicodeUTF8));
         labelOutputCompression->setText(QApplication::translate("MainWindow", "File Compressed Name:", 0, QApplication::UnicodeUTF8));
         btnExploreCom->setText(QApplication::translate("MainWindow", "...", 0, QApplication::UnicodeUTF8));
@@ -144,6 +153,7 @@ public:
         decompressButton->setText(QApplication::translate("MainWindow", "Decompress", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabDecompression), QApplication::translate("MainWindow", "Decompression", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

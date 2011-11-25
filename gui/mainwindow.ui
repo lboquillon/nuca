@@ -213,11 +213,23 @@
     </property>
     <addaction name="exit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="about"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="exit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="about">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

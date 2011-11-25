@@ -29,6 +29,7 @@ private slots:
     void on_decompressButton_clicked();
 
     void on_exit_triggered();
+    void on_about_triggered();
 
 private:
     Ui::MainWindow* ui;
