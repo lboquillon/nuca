@@ -34,6 +34,7 @@ nuca.h: Nucleotides Compression Algorithms
 #include "convert_type.h"
 #include "add_ns.h"
 #include "istream_loader.h"
+#include "fasta_format_saver.h"
 
 #endif
 

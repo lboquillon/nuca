@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu Nov 24 19:41:38 2011
+** Created: Sat Dec 3 16:33:06 2011
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -30,30 +30,30 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
-    QAction* exit;
-    QAction* about;
-    QWidget* centralWidget;
-    QFrame* frame;
-    QTabWidget* tabWidget;
-    QWidget* tabCompression;
-    QLabel* labelInputCompression;
-    QLabel* labelOutputCompression;
-    QLineEdit* compressFileIn;
-    QLineEdit* compressFileOut;
-    QPushButton* btnExploreCom;
-    QPushButton* compressButton;
-    QWidget* tabDecompression;
-    QLineEdit* decompressionFileIn;
-    QLineEdit* decompressionFileOut;
-    QLabel* labelInputDecompressing;
-    QLabel* labelOutputDecompressing;
-    QPushButton* btnExploreDec;
-    QPushButton* decompressButton;
-    QMenuBar* menuBar;
-    QMenu* menuFile;
-    QMenu* menuHelp;
+    QAction *exit;
+    QAction *about;
+    QWidget *centralWidget;
+    QFrame *frame;
+    QTabWidget *tabWidget;
+    QWidget *tabCompression;
+    QLabel *labelInputCompression;
+    QLabel *labelOutputCompression;
+    QLineEdit *compressFileIn;
+    QLineEdit *compressFileOut;
+    QPushButton *btnExploreCom;
+    QPushButton *compressButton;
+    QWidget *tabDecompression;
+    QLineEdit *decompressionFileIn;
+    QLineEdit *decompressionFileOut;
+    QLabel *labelInputDecompressing;
+    QLabel *labelOutputDecompressing;
+    QPushButton *btnExploreDec;
+    QPushButton *decompressButton;
+    QMenuBar *menuBar;
+    QMenu *menuFile;
+    QMenu *menuHelp;
 
-    void setupUi(QMainWindow* MainWindow)
+    void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
@@ -137,7 +137,7 @@ public:
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
-    void retranslateUi(QMainWindow* MainWindow)
+    void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Nuca: Nucleotide Compression Algorithms", 0, QApplication::UnicodeUTF8));
         exit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
@@ -158,9 +158,8 @@ public:
 
 };
 
-namespace Ui
-{
-class MainWindow: public Ui_MainWindow {};
+namespace Ui {
+    class MainWindow: public Ui_MainWindow {};
 } // namespace Ui
 
 QT_END_NAMESPACE
