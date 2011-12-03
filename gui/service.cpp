@@ -37,7 +37,7 @@ void compression(const std::string& fileIn, const std::string& fileOut)
 
 void decompression(const std::string& fileIn, const std::string& fileOut)
 {
-    IstreamLoader<DecompressingBitHandler<AddNs<OstreamSaver<EndLayer> > > > decompressor;
+    IstreamLoader<DecompressingBitHandler<AddNs<FastaFormatSaver<EndLayer> > > > decompressor;
 
     std::ifstream is(fileIn.c_str(), std::ios_base::binary);
     std::ofstream os(fileOut.c_str());
