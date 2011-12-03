@@ -1,6 +1,6 @@
 Import ('env')
  
-name = 'Nucapp'
+name = 'nucapp'
 inc = env.Dir('.')
 src = env.Glob('*.cpp')
 
