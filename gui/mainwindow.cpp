@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget* parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setFixedSize(width(), height());
 }
 
 MainWindow::~MainWindow()
@@ -36,7 +37,7 @@ void MainWindow::on_compressButton_clicked()
             && !ui->compressFileIn->text().isEmpty()
             && !ui->compressFileOut->text().isEmpty())
     {
-        compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString());
+        compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString() + ".dfg");
 
         QMessageBox msgBox(QMessageBox::Information, "NUCA", "Compression Finished");
         msgBox.exec();
@@ -50,7 +51,7 @@ void MainWindow::on_compressButton_clicked()
 
 void MainWindow::on_btnExploreDec_clicked()
 {
-    QString file_selected = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::currentPath(), tr("All files (*.*)"));
+    QString file_selected = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::currentPath(), tr("DFG files (*.dfg)"));
 
     if (!file_selected.isNull() && !file_selected.isEmpty())
     {
