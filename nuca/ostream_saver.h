@@ -52,7 +52,7 @@ inline void OstreamSaver<LowerLayer>::receiveData(DataType buffer)
     for (size_t byte = 0; byte < sizeof(buffer); ++byte)
     {
         of->put(static_cast<char>(buffer & 0xff));
-        //cerr << std::hex << (buffer & 0xff) << endl;
+        LowerLayer::receiveData(ConvertDataType<OstreamSaver<LowerLayer>, LowerLayer>::convert(buffer & 0xff));
         buffer >>= 8;
     }
 }
