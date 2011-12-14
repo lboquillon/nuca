@@ -37,7 +37,7 @@ class FastaFormatSaver : public LowerLayer
     size_t currentCharNumber;
     static const size_t lineLimit = 50;
 public:
-    typedef char DataType;
+    typedef unsigned char DataType;
 
     FastaFormatSaver()
         : of(NULL),
@@ -55,13 +55,14 @@ inline void FastaFormatSaver<LowerLayer>::receiveData(DataType buffer)
 
     for (size_t byte = 0; byte < sizeof(buffer); ++byte)
     {
-        of->put(static_cast<char>(buffer & 0xff));
+        LowerLayer::receiveData(ConvertDataType<FastaFormatSaver<LowerLayer>, LowerLayer>::convert(buffer & 0xff));
+        of->put(static_cast<DataType>(buffer & 0xff));
         buffer >>= 8;
     }
 
     if (++currentCharNumber == lineLimit)
     {
-        of->put('\n');
+        *(of) << std::endl;
         currentCharNumber = 0;
     }
 }
