@@ -27,7 +27,7 @@ add_ns.h: Nucleotides Compression Algorithms
 #include "fsm.h"
 #include "nuc_mapper.h"
 
-#include <biopp/bio_molecular/bio_molecular.h>
+#include <biopp/biopp.h>
 
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
@@ -272,7 +272,7 @@ inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nu
 {
     const State* state;
 
-    this->fsm->nCounter = (this->fsm->nCounter << bitPerNuc) | to_nuc(n);
+    this->fsm->nCounter = (this->fsm->nCounter << bitPerNuc) | biopp::to_nuc(n);
 
     if (this->fsm->genericCounter < nucsNumber)
     {
