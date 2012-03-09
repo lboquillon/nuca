@@ -272,7 +272,7 @@ inline const typename AddNs<LowerLayer, nucsNumber>::State* AddNs<LowerLayer, nu
 {
     const State* state;
 
-    this->fsm->nCounter = (this->fsm->nCounter << bitPerNuc) | biopp::to_nuc(n);
+    this->fsm->nCounter = (this->fsm->nCounter << bitPerNuc) | biopp::Nucleotide(n).value;
 
     if (this->fsm->genericCounter < nucsNumber)
     {

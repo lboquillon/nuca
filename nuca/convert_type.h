@@ -56,7 +56,7 @@ private:
 public:
     static typename Lower::DataType convert(typename UpperLayer::DataType data)
     {
-        return typename Lower::DataType(biopp::to_nuc(data));
+        return typename Lower::DataType(biopp::Nucleotide(data).value);
     }
 };
 
