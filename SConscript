@@ -7,5 +7,5 @@ src = []
 deps = ['mili', 'biopp']
 CXXFLAGS = ['-DMILI_NAMESPACE', '-O3']
 
-env.Append (CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
+env.Append(CXXFLAGS=CXXFLAGS, CFLAGS=CXXFLAGS)
 env.CreateHeaderOnlyLibrary(name, inc, ext_inc, deps)
