@@ -24,6 +24,7 @@ fsm.h: Nucleotides Compression Algorithms
 #define FSM_H
 
 #include <string>
+#include "biopp/biopp.h"
 
 namespace nuca
 {
@@ -51,16 +52,12 @@ enum EndSeqStimulus
     ACGT        95910     110463
 */
 
-static const std::string rareSeq = "TACGAC";
+static const std::string rareSeq = "UACGAC";
 
 inline char valueToNuc(size_t value)
 {
-    static const char nuc[] = "ATCG";
-
-    if (value >= sizeof(nuc) / sizeof(nuc[0]))
-        throw "Invalid value";
-
-    return nuc[value];
+    biopp::Nucleotide n = biopp::Nucleotide::Alpha(value);
+    return n.as_char();
 }
 }
 
