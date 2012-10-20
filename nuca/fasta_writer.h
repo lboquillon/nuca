@@ -1,5 +1,5 @@
 /*
-fasta_format_saver.h: Nucleotides Compression Algorithms
+fasta_writer.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
@@ -20,64 +20,62 @@ fasta_format_saver.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef FASTA_FORMAT_SAVER_H
-#define FASTA_FORMAT_SAVER_H
+#ifndef FASTA_WRITER_H
+#define FASTA_WRITER_H
 
-#include <fstream>
 #include <string>
-#include <iostream>
+#include "biopp-filer/bioppFiler.h"
 
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class FastaFormatSaver : public LowerLayer
+class FastaWriter : public LowerLayer
 {
-    std::ostream* of;
-    size_t currentCharNumber;
-    static const size_t lineLimit = 50;
+private:
+    std::string seqString;
+    std::string seqName;
+    std::string fileName;
+
 public:
     typedef unsigned char DataType;
 
-    FastaFormatSaver()
-        : of(NULL),
-          currentCharNumber(0)
+    FastaWriter()
     {}
 
-    void setOstream(std::ostream&);
+    void setFastaFileOut(const std::string&);
+    void setSeqName(const std::string&);
     void receiveData(DataType);
-    void end(DataType);
+    void end();
 };
 
 template<class LowerLayer>
-inline void FastaFormatSaver<LowerLayer>::receiveData(DataType buffer)
+inline void FastaWriter<LowerLayer>::setFastaFileOut(const std::string& file)
 {
-
-    for (size_t byte = 0; byte < sizeof(buffer); ++byte)
-    {
-        LowerLayer::receiveData(ConvertDataType<FastaFormatSaver<LowerLayer>, LowerLayer>::convert(buffer & 0xff));
-        of->put(static_cast<DataType>(buffer & 0xff));
-        buffer >>= 8;
-    }
-
-    if (++currentCharNumber == lineLimit)
-    {
-        *(of) << std::endl;
-        currentCharNumber = 0;
-    }
+    fileName = file;
 }
 
 template<class LowerLayer>
-inline void FastaFormatSaver<LowerLayer>::end(DataType n)
+inline void FastaWriter<LowerLayer>::setSeqName(const std::string& name)
 {
-    receiveData(n);
+    seqName = name;
 }
 
 template<class LowerLayer>
-inline void FastaFormatSaver<LowerLayer>::setOstream(std::ostream& ostr)
+inline void FastaWriter<LowerLayer>::receiveData(DataType buffer)
 {
-    of = &ostr;
+    seqString += buffer;
+    LowerLayer::receiveData(ConvertDataType<FastaWriter<LowerLayer>, LowerLayer>::convert(buffer));
 }
+
+template<class LowerLayer>
+inline void FastaWriter<LowerLayer>::end()
+{
+    bioppFiler::FastaSaver<biopp::PseudoNucSequence> fs(fileName);
+    fs.saveNextSequence(seqName, biopp::PseudoNucSequence(seqString));
+    LowerLayer::end();
+}
+
 
 #endif
 

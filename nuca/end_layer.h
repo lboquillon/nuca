@@ -36,6 +36,7 @@ protected:
 public:
     void receiveData(char) { }
     void end(char) { }
+    void end() { }
 };
 
 #endif

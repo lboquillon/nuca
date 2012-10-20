@@ -186,6 +186,7 @@ template<class LowerLayer, size_t nucsNumber>
 inline void AddNs<LowerLayer, nucsNumber>::end(char)
 {
     current->stimulusEndSeq();
+    LowerLayer::end();
 
 }
 

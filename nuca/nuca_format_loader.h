@@ -1,5 +1,5 @@
 /*
-istream_loader.h: Nucleotides Compression Algorithms
+nuca_format_loader.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Leonardo Boquillon and Daniel Gutson, FuDePAN
 
     This file is part of Nuca.
@@ -20,8 +20,8 @@ istream_loader.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef ISTREAM_LOADER_H
-#define ISTREAM_LOADER_H
+#ifndef NUCA_FORMAT_LOADER_H
+#define NUCA_FORMAT_LOADER_H
 
 #include <iostream>
 #include <fstream>
@@ -30,13 +30,13 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class IstreamLoader : public LowerLayer
+class NucaFormatLoader : public LowerLayer
 {
     std::istream* loader;
 public:
     typedef char DataType;
 
-    IstreamLoader()
+    NucaFormatLoader()
     { }
 
     void setIstream(std::istream&);
@@ -44,13 +44,13 @@ public:
 };
 
 template<class LowerLayer>
-void IstreamLoader<LowerLayer>::setIstream(std::istream& ist)
+void NucaFormatLoader<LowerLayer>::setIstream(std::istream& ist)
 {
     loader = &ist;
 }
 
 template<class LowerLayer>
-void IstreamLoader<LowerLayer>::run()
+void NucaFormatLoader<LowerLayer>::run()
 {
     DataType last;
     DataType current;
@@ -58,7 +58,7 @@ void IstreamLoader<LowerLayer>::run()
 
     while (loader->get(current))
     {
-        LowerLayer::receiveData(ConvertDataType<IstreamLoader<LowerLayer>, LowerLayer>::convert(last));
+        LowerLayer::receiveData(ConvertDataType<NucaFormatLoader<LowerLayer>, LowerLayer>::convert(last));
         last = current;
     }
 
