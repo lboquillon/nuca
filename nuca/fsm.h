@@ -56,8 +56,7 @@ static const std::string rareSeq = "UACGAC";
 
 inline char valueToNuc(size_t value)
 {
-    biopp::Nucleotide n = biopp::Nucleotide::Alpha(value);
-    return n.as_char();
+    return biopp::Nucleotide(biopp::Nucleotide::Alpha(value)).as_char();
 }
 }
 

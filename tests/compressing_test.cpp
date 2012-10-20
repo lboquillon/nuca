@@ -23,7 +23,7 @@ compressing_test.cpp: Nucleotides Compression Algorithms
 #include <gtest/gtest.h>
 #include "nuca/nuca.h"
 
-typedef RemoveNs<StringTestLayer<CompressingBitHandler<OstreamSaver<EndLayer> > > > TestCompressor;
+typedef RemoveNs<StringTestLayer<CompressingBitHandler<NucaFormatWriter<EndLayer> > > > TestCompressor;
 
 TEST(Compressing, compressingNs1)
 {
