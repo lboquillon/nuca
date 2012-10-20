@@ -7,11 +7,8 @@ class Service
 {
 
 public:
-    void compression(const std::string& fileIn, const std::string& fileOut);
-    void decompression(const std::string& fileIn, const std::string& fileOut);
-
-private:
-    std::string sequenceName;
+    static void compression(const std::string& fileIn, const std::string& fileOut, bool& multipleSequence);
+    static void decompression(const std::string& fileIn, const std::string& fileOut);
 };
 
 
