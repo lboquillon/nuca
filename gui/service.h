@@ -3,8 +3,16 @@
 
 #include <string>
 
-void compression(const std::string& fileIn, const std::string& fileOut);
+class Service
+{
 
-void decompression(const std::string& fileIn, const std::string& fileOut);
+public:
+    void compression(const std::string& fileIn, const std::string& fileOut);
+    void decompression(const std::string& fileIn, const std::string& fileOut);
+
+private:
+    std::string sequenceName;
+};
+
 
 #endif

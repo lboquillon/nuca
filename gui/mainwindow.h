@@ -32,6 +32,7 @@ private slots:
     void on_about_triggered();
 
 private:
+    Service service;
     Ui::MainWindow* ui;
 };
 

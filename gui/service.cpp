@@ -3,47 +3,24 @@
 #include "service.h"
 #include "nuca/nuca.h"
 
-void compression(const std::string& fileIn, const std::string& fileOut)
+void Service::compression(const std::string& fileIn, const std::string& fileOut)
 {
     std::ofstream os(fileOut.c_str(), std::ios_base::binary);
-    RemoveNs<CompressingBitHandler<OstreamSaver<EndLayer> > > compressor;
+    FastaLoader<RemoveNs<CompressingBitHandler<NucaFormatWriter<EndLayer> > > > compressor;
     compressor.setOstream(os);
-
-    std::ifstream is(fileIn.c_str());
-    if (is)
-    {
-
-        std::string str;
-
-        while (getline(is, str))
-        {
-            if (!str.empty() && str[0] != '>')
-                for (size_t i = 0; i < str.size(); ++i)
-                {
-                    char c = toupper(str[i]);
-                    if (c == 'C' || c  == 'T' || c == 'G' || c == 'A' || c == 'N')
-                        compressor.receiveData(c);
-                }
-        }
-
-        compressor.receiveData(nuca::EndSeq);
-    }
-    else
-    {
-        throw "The file was not found";
-    }
-
+    compressor.setSeqNameString(sequenceName);
+    compressor.setFastaFile(fileIn);
+    compressor.run();
 }
 
-void decompression(const std::string& fileIn, const std::string& fileOut)
+void Service::decompression(const std::string& fileIn, const std::string& fileOut)
 {
-    IstreamLoader<DecompressingBitHandler<AddNs<FastaFormatSaver<EndLayer> > > > decompressor;
+    NucaFormatLoader<DecompressingBitHandler<AddNs<FastaWriter<EndLayer> > > > decompressor;
 
     std::ifstream is(fileIn.c_str(), std::ios_base::binary);
-    std::ofstream os(fileOut.c_str());
 
+    decompressor.setSeqName(sequenceName);
+    decompressor.setFastaFileOut(fileOut);
     decompressor.setIstream(is);
-    decompressor.setOstream(os);
-
     decompressor.run();
 }
