@@ -21,6 +21,7 @@ TEST(BiopppFilerLayerTest, Load)
 {
     CREATE_FASTA_FILE("file1_test", "seq1", "ACUGNNCATT");
 
+    bool multiple;
     std::string out;
     std::string nameOut;
     Loader loader;
@@ -28,7 +29,7 @@ TEST(BiopppFilerLayerTest, Load)
     loader.setFastaFile("file1_test");
     loader.setOutputString(out);
     loader.setSeqNameString(nameOut);
-    loader.run();
+    loader.run(multiple);
 
     ASSERT_EQ(out, "ACUGNNCAUU");
     ASSERT_EQ(nameOut, "seq1");
@@ -40,6 +41,7 @@ TEST(BioppFilerLayerTest, LoadWrite)
     std::string name;
     std::string nameEx;
     std::string testStr;
+    bool multiple;
     biopp::PseudoNucSequence outFromFile;
 
     CREATE_FASTA_FILE("file_in_test", "seq2", seq);
@@ -55,7 +57,7 @@ TEST(BioppFilerLayerTest, LoadWrite)
     loaderWriter.setFastaFileOut("file_out_test");
     loaderWriter.setSeqName(name);
 
-    loaderWriter.run();
+    loaderWriter.run(multiple);
 
     GET_SEQUENCE_FROM_FILE("file_out_test", nameEx, outFromFile);
 

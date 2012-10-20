@@ -44,7 +44,7 @@ public:
 
     void setFastaFile(const std::string&);
     void setSeqNameString(std::string&);
-    void run();
+    void run(bool&);
 };
 
 
@@ -62,11 +62,12 @@ void FastaLoader<LowerLayer>::setFastaFile(const std::string& fastaFile)
 }
 
 template<class LowerLayer>
-void FastaLoader<LowerLayer>::run()
+void FastaLoader<LowerLayer>::run(bool& multipleSequence)
 {
-    bioppFiler::FastaParser<Sequence> loader(fileName);
 
     Sequence seq;
+    bioppFiler::FastaParser<Sequence> loader(fileName);
+
     loader.getNextSequence(*sequenceName, seq);
 
     for (size_t i = 0; i < seq.length(); ++i)
@@ -74,6 +75,7 @@ void FastaLoader<LowerLayer>::run()
 
     LowerLayer::receiveData(nuca::EndSeq);
 
+    multipleSequence = loader.getNextSequence(*sequenceName, seq);
 }
 
 #endif
