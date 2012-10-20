@@ -40,6 +40,7 @@ public:
     void setOutputString(std::string&);
     void receiveData(DataType);
     void end(DataType);
+    void end();
 };
 
 template<class LowerLayer>
@@ -62,6 +63,12 @@ inline void StringTestLayer<LowerLayer>::end(DataType n)
     LowerLayer::end(n);
 }
 
+template<class LowerLayer>
+inline void StringTestLayer<LowerLayer>::end()
+{
+    LowerLayer::end();
+}
+
 template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
@@ -80,9 +87,9 @@ public:
     }
 
     void receiveData(DataType);
-    void end(DataType);
     void setNucTest(DataType);
-
+    void end();
+    void end(DataType);
 };
 
 template<class LowerLayer>
@@ -107,6 +114,9 @@ inline void ExceptionTestLayer<LowerLayer>::receiveData(DataType data)
 
 template<class LowerLayer>
 inline void ExceptionTestLayer<LowerLayer>::end(DataType /*data*/) { }
+
+template<class LowerLayer>
+inline void ExceptionTestLayer<LowerLayer>::end() { }
 
 template<class LowerLayer>
 inline void ExceptionTestLayer<LowerLayer>::setNucTest(DataType nuc)

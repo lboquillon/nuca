@@ -129,6 +129,7 @@ public:
     void receiveData(nuca::EndSeqStimulus);
     void flush(char);
     void end();
+    void end(char);
 };
 
 template<class LowerLayer, size_t nucsNumber>
@@ -194,6 +195,12 @@ template<class LowerLayer, size_t nucsNumber>
 inline void RemoveNs<LowerLayer, nucsNumber>::end()
 {
     LowerLayer::end(sizeNuc == 0 ? 4 : sizeNuc);
+}
+
+template<class LowerLayer, size_t nucsNumber>
+inline void RemoveNs<LowerLayer, nucsNumber>::end(char /*data*/)
+{
+    end();
 }
 
 template<class LowerLayer, size_t nucsNumber>
