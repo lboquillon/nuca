@@ -23,8 +23,8 @@ compressing_decompressing_file_test.cpp:: Nucleotides Compression Algorithms
 #include <gtest/gtest.h>
 #include "nuca/nuca.h"
 
-typedef RemoveNs<CompressingBitHandler<OstreamSaver<CompressionEventsCounterLayer<EndLayer> > > > TestCompressor;
-typedef IstreamLoader<DecompressingBitHandler<AddNs<StringTestLayer<EndLayer> > > > TestDecompressor;
+typedef RemoveNs<CompressingBitHandler<NucaFormatWriter<CompressionEventsCounterLayer<EndLayer> > > > TestCompressor;
+typedef NucaFormatLoader<DecompressingBitHandler<AddNs<StringTestLayer<EndLayer> > > > TestDecompressor;
 
 TEST(CompressingDecompressingFile, compressingDecompressingFile1)
 {

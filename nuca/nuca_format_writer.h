@@ -1,5 +1,5 @@
 /*
-ostream_saver.h: Nucleotides Compression Algorithms
+nuca_format_writer.h: Nucleotides Compression Algorithms
     Copyright (C) 2011 Daniel Gutson and Leonardo Boquillon, FuDePAN
 
     This file is part of Nuca.
@@ -20,8 +20,8 @@ ostream_saver.h: Nucleotides Compression Algorithms
     NOTE: This file is in prototype stage, and is under active development.
 */
 
-#ifndef OSTREAM_SAVER_H
-#define OSTREAM_SAVER_H
+#ifndef NUCA_FORMAT_WRITER_H
+#define NUCA_FORMAT_WRITER_H
 
 #include <fstream>
 #include <string>
@@ -31,13 +31,13 @@ template<class UpperLayer, class LowerLayer>
 class ConvertDataType;
 
 template<class LowerLayer>
-class OstreamSaver : public LowerLayer
+class NucaFormatWriter : public LowerLayer
 {
     std::ostream* of;
 public:
     typedef char DataType;
 
-    OstreamSaver()
+    NucaFormatWriter()
         : of(NULL)
     {}
 
@@ -47,25 +47,25 @@ public:
 };
 
 template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::receiveData(DataType buffer)
+inline void NucaFormatWriter<LowerLayer>::receiveData(DataType buffer)
 {
     for (size_t byte = 0; byte < sizeof(buffer); ++byte)
     {
         of->put(static_cast<char>(buffer & 0xff));
-        LowerLayer::receiveData(ConvertDataType<OstreamSaver<LowerLayer>, LowerLayer>::convert(buffer & 0xff));
+        LowerLayer::receiveData(ConvertDataType<NucaFormatWriter<LowerLayer>, LowerLayer>::convert(buffer & 0xff));
         buffer >>= 8;
     }
 }
 
 template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::end(DataType n)
+inline void NucaFormatWriter<LowerLayer>::end(DataType n)
 {
     receiveData(n);
     //of->close(); close only for ofstream, what is going to do?
 }
 
 template<class LowerLayer>
-inline void OstreamSaver<LowerLayer>::setOstream(std::ostream& ostr)
+inline void NucaFormatWriter<LowerLayer>::setOstream(std::ostream& ostr)
 {
     of = &ostr;
 }

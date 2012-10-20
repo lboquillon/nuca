@@ -29,12 +29,13 @@ nuca.h: Nucleotides Compression Algorithms
 #include "statistics_layer.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
-#include "ostream_saver.h"
 #include "bit_handler.h"
 #include "convert_type.h"
 #include "add_ns.h"
-#include "istream_loader.h"
-#include "fasta_format_saver.h"
+#include "fasta_writer.h"
+#include "fasta_loader.h"
+#include "nuca_format_loader.h"
+#include "nuca_format_writer.h"
 
 #endif
 

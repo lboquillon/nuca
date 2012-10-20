@@ -3,8 +3,13 @@
 
 #include <string>
 
-void compression(const std::string& fileIn, const std::string& fileOut);
+class Service
+{
 
-void decompression(const std::string& fileIn, const std::string& fileOut);
+public:
+    static void compression(const std::string& fileIn, const std::string& fileOut, bool& multipleSequence);
+    static void decompression(const std::string& fileIn, const std::string& fileOut);
+};
+
 
 #endif

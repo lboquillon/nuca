@@ -25,13 +25,14 @@ convert_type.h: Nucleotides Compression Algorithms
 
 #include "end_layer.h"
 #include "statistics_layer.h"
-#include "ostream_saver.h"
 #include "bit_handler.h"
 #include "tests_layers.h"
 #include "remove_ns.h"
 #include "add_ns.h"
-#include "istream_loader.h"
-
+#include "nuca_format_loader.h"
+#include "nuca_format_writer.h"
+#include "fasta_loader.h"
+#include "fasta_writer.h"
 
 #include <biopp/bio_molecular/bio_molecular.h>
 
@@ -57,6 +58,30 @@ public:
     static typename Lower::DataType convert(typename UpperLayer::DataType data)
     {
         return typename Lower::DataType(biopp::Nucleotide(data).value);
+    }
+};
+
+
+template<class UpperLayer, class LowerLayer>
+class ConvertDataType<UpperLayer, FastaWriter<LowerLayer> >
+{
+private:
+    typedef FastaWriter<LowerLayer> Lower;
+public:
+    static typename Lower::DataType convert(typename UpperLayer::DataType data)
+    {
+        return static_cast<typename Lower::DataType>(data & 0xFF);
+    }
+
+};
+
+template<class LowerLayer>
+class ConvertDataType<FastaLoader<LowerLayer>, LowerLayer>
+{
+public:
+    static typename LowerLayer::DataType convert(typename FastaLoader<LowerLayer>::DataType data)
+    {
+        return typename LowerLayer::DataType(data.as_char());
     }
 };
 
