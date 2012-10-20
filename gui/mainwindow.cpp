@@ -37,7 +37,7 @@ void MainWindow::on_compressButton_clicked()
             && !ui->compressFileIn->text().isEmpty()
             && !ui->compressFileOut->text().isEmpty())
     {
-        compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString() + ".nuca");
+        service.compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString() + ".nuca");
 
         QMessageBox msgBox(QMessageBox::Information, "NUCA", "Compression Finished");
         msgBox.exec();
@@ -71,7 +71,7 @@ void MainWindow::on_decompressButton_clicked()
             && !ui->decompressionFileIn->text().isEmpty()
             && !ui->decompressionFileOut->text().isEmpty())
     {
-        decompression(ui->decompressionFileIn->text().toStdString(), ui->decompressionFileOut->text().toStdString());
+        service.decompression(ui->decompressionFileIn->text().toStdString(), ui->decompressionFileOut->text().toStdString());
 
         QMessageBox msgBox(QMessageBox::Information, "NUCA", "Decompression Finished");
         msgBox.exec();
