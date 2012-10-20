@@ -66,6 +66,8 @@ void FastaLoader<LowerLayer>::run(bool& multipleSequence)
 {
 
     Sequence seq;
+    Sequence seqTest;
+    std::string strTest;
     bioppFiler::FastaParser<Sequence> loader(fileName);
 
     loader.getNextSequence(*sequenceName, seq);
@@ -75,7 +77,7 @@ void FastaLoader<LowerLayer>::run(bool& multipleSequence)
 
     LowerLayer::receiveData(nuca::EndSeq);
 
-    multipleSequence = loader.getNextSequence(*sequenceName, seq);
+    multipleSequence = loader.getNextSequence(strTest, seqTest);
 }
 
 #endif
