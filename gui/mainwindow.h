@@ -7,7 +7,6 @@
 #include <QFileDialog>
 #include <QString>
 #include <QDir>
-#include "service.h"
 
 namespace Ui
 {
@@ -32,7 +31,6 @@ private slots:
     void on_about_triggered();
 
 private:
-    Service service;
     Ui::MainWindow* ui;
 };
 

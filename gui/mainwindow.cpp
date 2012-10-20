@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "aboutdialog.h"
+#include "service.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -37,7 +38,16 @@ void MainWindow::on_compressButton_clicked()
             && !ui->compressFileIn->text().isEmpty()
             && !ui->compressFileOut->text().isEmpty())
     {
-        service.compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString() + ".nuca");
+
+        bool multipleSequence;
+        Service::compression(ui->compressFileIn->text().toStdString(), ui->compressFileOut->text().toStdString() + ".nuca", multipleSequence);
+
+        if (multipleSequence)
+        {
+            QMessageBox msgBox(QMessageBox::Information, "NUCA", "The file contains multiple sequences. Only the first was compressed");
+            msgBox.exec();
+        }
+
 
         QMessageBox msgBox(QMessageBox::Information, "NUCA", "Compression Finished");
         msgBox.exec();
@@ -71,7 +81,7 @@ void MainWindow::on_decompressButton_clicked()
             && !ui->decompressionFileIn->text().isEmpty()
             && !ui->decompressionFileOut->text().isEmpty())
     {
-        service.decompression(ui->decompressionFileIn->text().toStdString(), ui->decompressionFileOut->text().toStdString());
+        Service::decompression(ui->decompressionFileIn->text().toStdString(), ui->decompressionFileOut->text().toStdString());
 
         QMessageBox msgBox(QMessageBox::Information, "NUCA", "Decompression Finished");
         msgBox.exec();
