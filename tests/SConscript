@@ -1,9 +1,9 @@
-Import ('env')
+Import('env')
 
 name = 'nuca'
 inc = env.Dir('.')
 src = env.Glob('*.cpp')
-deps = ['nuca', 'gmock', 'gtest_main', 'gtest', 'biopp', 'biopp-filer']
+deps = ['gmock', 'gtest_main', 'gtest', 'biopp', 'biopp-filer']
 
 env.CreateTest(name, inc, src, deps)
 
