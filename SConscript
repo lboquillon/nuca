@@ -1,7 +1,7 @@
-Import ('env')
+Import('env')
 
 name = 'nuca'
-ext_inc = env.Dir ('nuca')
+inc = env.Dir ('nuca')
 deps = ['mili', 'biopp', 'biopp-filer']
 
-env.CreateHeaderOnlyLibrary(name, ext_inc, deps)
+env.CreateHeaderOnlyLibrary(name, inc, deps)
